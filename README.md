@@ -10,10 +10,9 @@
 whenever one of us adds something
 - Make a branch
 - Do you stuff and commit to it normally
-- When feature is done, rebase on branch main (Ensures feature branchs is up to date)
+- When feature is done, rebase on branch main (Ensures feature branches is up to date)
 - Merge feature Branch back into main
 this should allow us to work in parallel without causing merge conflicts all of the time
 
 ## Robot Design
-A drone capable of autonomously picking and placing bricks in a swarm.
-
+A drone capable of autonomously picking and placing bricks in a swarm to build a desired structure.
