@@ -1,3 +1,7 @@
-# pfr-project
+# Programming for Robotics
+## 3003ICT_3261 - Group Project
 
-Hi, everyone!
+## Group Members
+- Benjamin Roeser
+- Luke Seeney
+- Jacob Matchett
