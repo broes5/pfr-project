@@ -1,0 +1,66 @@
+# Webots
+*.wbproj
+*.world.wbproj
+.cache/
+
+# Webots runtime files
+runtime.ini
+
+# Controller binaries (C/C++)
+*.o
+*.d
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Build directories
+build/
+/controllers/**/build/
+/plugins/**/build/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+*.egg
+
+# Java
+*.class
+*.jar
+
+# MATLAB
+*.mex*
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
