@@ -1,7 +1,7 @@
 include </home/benjamin/3D Printing/BOSL2/std.scad>
 
-//$fa=1;
-//$fs=0.4;
+$fa=1;
+$fs=0.4;
 
 // Brick dimensions (cm).
 bheight=7.6;
@@ -76,5 +76,8 @@ module brick() {
 }
 
 brick();
-//translate([-blength/2,0,-bheight-2])
+//rotate([0,0,90])
+//	translate([bwidth/1.9,blength/4,-bheight-2])
+//		brick();
+//translate([blength/2,0,-bheight-2])
 //	brick();
