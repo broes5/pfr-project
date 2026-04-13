@@ -1,32 +1,26 @@
-"""brain controller."""
+from controller import Supervisor
+import math
 
-# You may need to import some classes of the controller module. Ex:
-#  from controller import Robot, Motor, DistanceSensor
-from controller import Robot
+robot = Supervisor()
 
-# create the Robot instance.
-robot = Robot()
-
-# get the time step of the current world.
 timestep = int(robot.getBasicTimeStep())
+timestepSeconds = timestep / 1000.0
 
-# You should insert a getDevice-like function in order to get the
-# instance of a device of the robot. Something like:
-#  motor = robot.getDevice('motorname')
-#  ds = robot.getDevice('dsname')
-#  ds.enable(timestep)
+node = robot.getFromDef("MY_ROBOT")
+translation_field = node.getField("translation")
 
-# Main loop:
-# - perform simulation steps until Webots is stopping the controller
+time = 0.0
+
+def get_f(t):
+    return (math.sin(t) + 1) * 0.5;
+
+def lerp(a, b, t):
+    return a + ((b -a ) * t)
+
+def get_position(t):
+    return [lerp(-0.1, 0.1, get_f((t+400)*0.35)), lerp(-0.1, 0.1, get_f((t+342)*0.25)), lerp(0.2, 0.35, get_f(t*1.2))]
+
+
 while robot.step(timestep) != -1:
-    # Read the sensors:
-    # Enter here functions to read sensor data, like:
-    #  val = ds.getValue()
-
-    # Process sensor data here.
-
-    # Enter here functions to send actuator commands, like:
-    #  motor.setPosition(10.0)
-    print("Hello, world!");
-
-# Enter here exit cleanup code.
+    translation_field.setSFVec3f(get_position(time))
+    time += timestepSeconds
