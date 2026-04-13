@@ -13,3 +13,6 @@ TexturedBackground {
 }
 TexturedBackgroundLight {
 }
+Robot {
+  controller "brain"
+}
