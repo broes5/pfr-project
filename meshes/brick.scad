@@ -75,7 +75,38 @@ module brick() {
 			stub2();
 }
 
-brick();
+module half_brick() {
+	difference() {
+		cube([blength/2, bwidth, bheight], true);
+		translate([0,0,-bheight/2])
+			linear_extrude(bheight)
+				rect([blength/2-wallt,bwidth-wallt], rounding=2);
+		translate([-blength/4,-bwidth/2,-bheight/2])
+			stub1();
+		translate([blength/4,bwidth/2,-bheight/2])
+			rotate([0,0,180])
+				stub1();
+		translate([-blength/4,bwidth/2,-bheight/2])
+			rotate([0,0,-90])
+				stub1();
+		translate([blength/4,-bwidth/2,-bheight/2])
+			rotate([0,0,90])
+				stub1();
+	}
+	translate([-blength/4,-bwidth/2,bheight/2])
+		stub1();
+	translate([blength/4,bwidth/2,bheight/2])
+		rotate([0,0,180])
+			stub1();
+	translate([-blength/4,bwidth/2,bheight/2])
+		rotate([0,0,-90])
+			stub1();
+	translate([blength/4,-bwidth/2,bheight/2])
+		rotate([0,0,90])
+			stub1();
+}
+
+half_brick();
 //rotate([0,0,90])
 //	translate([bwidth/1.9,blength/4,-bheight-2])
 //		brick();
