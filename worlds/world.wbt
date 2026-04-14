@@ -2,14 +2,13 @@
 
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/Grass.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/OldSteel.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.16042531792150422 0.3757805031295577 0.9127172239184931 0.8289378167301196
-  position -1.7734216420755784 -1.6107323483191205 1.0414597836473913
+  orientation -0.17333955172615362 0.4469090361305447 0.877625041365755 0.8322726763049488
+  position -3.596641392694396 -3.094790528553028 2.1347851817197334
   follow "robot"
 }
 TexturedBackground {
@@ -37,12 +36,49 @@ DEF MY_ROBOT Robot {
   controller "brain"
   supervisor TRUE
 }
-DEF GROUND Pose {
+DEF ENV Transform {
   children [
-    Shape {
-      appearance Grass {
+    DEF ENV_SHAPE Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.8 0.478431 0.482353
+        }
+        texture ImageTexture {
+          url [
+            "../textures/debug_tile.png"
+          ]
+          filtering 0
+        }
+        textureTransform TextureTransform {
+          scale 500 500
+        }
       }
-      geometry Plane {
+      geometry Mesh {
+        url [
+          "../meshes/testing_grounds.obj"
+        ]
+      }
+    }
+    DEF ENV_PED Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 1 1
+        }
+        texture ImageTexture {
+          url [
+            "../textures/debug_tile.png"
+          ]
+          filtering 0
+        }
+        textureTransform TextureTransform {
+          scale 4 4
+          translation 0.1 0
+        }
+      }
+      geometry Mesh {
+        url [
+          "../meshes/testing_grounds_ped.obj"
+        ]
       }
     }
   ]
