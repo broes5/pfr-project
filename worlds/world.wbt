@@ -3,15 +3,16 @@
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/OldSteel.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/dji/mavic/protos/Mavic2Pro.proto"
 EXTERNPROTO "../protos/TestingGrounds.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.14382607461857852 0.24121019959843107 0.9597560626896274 1.1118266119594526
-  position -5.41953311088436 -4.451054703661532 6.26811716872243
+  orientation -0.16345356596711944 0.12110005392655275 0.9790902454378853 1.9437933233251052
+  position 2.3792955688579887 -2.564436237714715 4.776305572033374
   follow "robot"
-  followType "Pan and Tilt Shot"
+  followType "None"
 }
 TexturedBackground {
 }
@@ -45,5 +46,10 @@ DEF MY_ROBOT Robot {
     density -1
     mass 2
   }
+  controller "brain"
+}
+DEF Drone Mavic2Pro {
+  translation -1.85003 8.2 3.5
+  rotation 0 0 1 1.5708
   controller "brain"
 }
