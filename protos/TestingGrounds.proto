@@ -1,0 +1,65 @@
+#VRML_SIM R2025a utf8
+
+PROTO TestingGrounds [
+]
+{
+  Transform {
+
+    children [
+
+      # VISUALS
+      Shape {
+        appearance Appearance {
+          material Material {
+            diffuseColor 0.8 0.478431 0.482353
+          }
+          texture ImageTexture {
+            url ["../textures/debug_tile.png"]
+            filtering 0
+          }
+          textureTransform TextureTransform {
+            scale 500 500
+          }
+        }
+        geometry Mesh {
+          url ["../meshes/testing_grounds.obj"]
+        }
+      }
+
+      Shape {
+        appearance Appearance {
+          material Material {
+            diffuseColor 1 1 1
+          }
+          texture ImageTexture {
+            url ["../textures/debug_tile.png"]
+          }
+          textureTransform TextureTransform {
+            scale 4 4
+            translation 0.1 0
+          }
+        }
+        geometry Mesh {
+          url ["../meshes/testing_grounds_ped.obj"]
+        }
+      }
+
+      # PHYSICS
+      Solid {
+        locked TRUE
+
+        boundingObject Group {
+          children [
+            Mesh {
+              url ["../meshes/testing_grounds.obj"]
+            }
+            Mesh {
+              url ["../meshes/testing_grounds_ped.obj"]
+            }
+          ]
+        }
+      }
+
+    ]
+  }
+}

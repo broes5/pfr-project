@@ -3,22 +3,27 @@
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/OldSteel.proto"
+EXTERNPROTO "../protos/TestingGrounds.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.17333955172615362 0.4469090361305447 0.877625041365755 0.8322726763049488
-  position -3.596641392694396 -3.094790528553028 2.1347851817197334
+  orientation -0.14382607461857852 0.24121019959843107 0.9597560626896274 1.1118266119594526
+  position -5.41953311088436 -4.451054703661532 6.26811716872243
   follow "robot"
+  followType "Pan and Tilt Shot"
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
+TestingGrounds {
+}
 DEF MY_ROBOT Robot {
+  translation 0 8.58 4.73
+  rotation 0 0.19611613513818404 0.9805806756909201 -2.5663706143591725
   children [
     DEF DRONE_VISUAL Transform {
-      translation 0 0 0.2
       scale 0.2 0.2 0.2
       children [
         Shape {
@@ -33,53 +38,12 @@ DEF MY_ROBOT Robot {
       ]
     }
   ]
+  boundingObject Box {
+    size 0.8 0.7 0.1
+  }
+  physics Physics {
+    density -1
+    mass 2
+  }
   controller "brain"
-  supervisor TRUE
-}
-DEF ENV Transform {
-  children [
-    DEF ENV_SHAPE Shape {
-      appearance Appearance {
-        material Material {
-          diffuseColor 0.8 0.478431 0.482353
-        }
-        texture ImageTexture {
-          url [
-            "../textures/debug_tile.png"
-          ]
-          filtering 0
-        }
-        textureTransform TextureTransform {
-          scale 500 500
-        }
-      }
-      geometry Mesh {
-        url [
-          "../meshes/testing_grounds.obj"
-        ]
-      }
-    }
-    DEF ENV_PED Shape {
-      appearance Appearance {
-        material Material {
-          diffuseColor 1 1 1
-        }
-        texture ImageTexture {
-          url [
-            "../textures/debug_tile.png"
-          ]
-          filtering 0
-        }
-        textureTransform TextureTransform {
-          scale 4 4
-          translation 0.1 0
-        }
-      }
-      geometry Mesh {
-        url [
-          "../meshes/testing_grounds_ped.obj"
-        ]
-      }
-    }
-  ]
 }
