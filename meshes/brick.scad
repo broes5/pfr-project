@@ -120,66 +120,66 @@ translate([blength*4,0,0])
 echo([blength*4,0,0])
 	brick();
 // New layer.
-translate([blength*0.5,0,bheight+1])
-echo([blength*0.5,0,bheight+1])
+translate([blength*0.5,0,bheight])
+echo([blength*0.5,0,bheight])
 	brick();
-translate([blength*1.5,0,bheight+1])
-echo([blength*1.5,0,bheight+1])
+translate([blength*1.5,0,bheight])
+echo([blength*1.5,0,bheight])
 	brick();
-translate([blength*2.5,0,bheight+1])
-echo([blength*2.5,0,bheight+1])
+translate([blength*2.5,0,bheight])
+echo([blength*2.5,0,bheight])
 	brick();
-translate([blength*3.5,0,bheight+1])
-echo([blength*3.5,0,bheight+1])
+translate([blength*3.5,0,bheight])
+echo([blength*3.5,0,bheight])
 	brick();
-translate([blength*4.5,0,bheight+1])
-echo([blength*4.5,0,bheight+1])
-	brick();
-// New layer.
-translate([0,0,bheight*2+2])
-echo([0,0,bheight*2+2])
-	brick();
-translate([blength,0,bheight*2+2])
-echo([blength,0,bheight*2+2])
-	brick();
-translate([blength*2,0,bheight*2+2])
-echo([blength*2,0,bheight*2+2])
-	brick();
-translate([blength*3,0,bheight*2+2])
-echo([blength*3,0,bheight*2+2])
-	brick();
-translate([blength*4,0,bheight*2+2])
-echo([blength*4,0,bheight*2+2])
+translate([blength*4.5,0,bheight])
+echo([blength*4.5,0,bheight])
 	brick();
 // New layer.
-translate([blength*0.5,0,bheight*3+3])
-echo([blength*0.5,0,bheight*3+3])
+translate([0,0,bheight*2])
+echo([0,0,bheight*2])
 	brick();
-translate([blength*1.5,0,bheight*3+3])
-echo([blength*1.5,0,bheight*3+3])
+translate([blength,0,bheight*2])
+echo([blength,0,bheight*2])
 	brick();
-translate([blength*2.5,0,bheight*3+3])
-echo([blength*2.5,0,bheight*3+3])
+translate([blength*2,0,bheight*2])
+echo([blength*2,0,bheight*2])
 	brick();
-translate([blength*3.5,0,bheight*3+3])
-echo([blength*3.5,0,bheight*3+3])
+translate([blength*3,0,bheight*2])
+echo([blength*3,0,bheight*2])
 	brick();
-translate([blength*4.5,0,bheight*3+3])
-echo([blength*4.5,0,bheight*3+3])
+translate([blength*4,0,bheight*2])
+echo([blength*4,0,bheight*2])
 	brick();
 // New layer.
-translate([0,0,bheight*4+4])
-echo([0,0,bheight*4+4])
+translate([blength*0.5,0,bheight*3])
+echo([blength*0.5,0,bheight*3])
 	brick();
-translate([blength,0,bheight*4+4])
-echo([blength,0,bheight*4+4])
+translate([blength*1.5,0,bheight*3])
+echo([blength*1.5,0,bheight*3])
 	brick();
-translate([blength*2,0,bheight*4+4])
-echo([blength*2,0,bheight*4+4])
+translate([blength*2.5,0,bheight*3])
+echo([blength*2.5,0,bheight*3])
 	brick();
-translate([blength*3,0,bheight*4+4])
-echo([blength*3,0,bheight*4+4])
+translate([blength*3.5,0,bheight*3])
+echo([blength*3.5,0,bheight*3])
 	brick();
-translate([blength*4,0,bheight*4+4])
-echo([blength*4,0,bheight*4+4])
+translate([blength*4.5,0,bheight*3])
+echo([blength*4.5,0,bheight*3])
+	brick();
+// New layer.
+translate([0,0,bheight*4])
+echo([0,0,bheight*4])
+	brick();
+translate([blength,0,bheight*4])
+echo([blength,0,bheight*4])
+	brick();
+translate([blength*2,0,bheight*4])
+echo([blength*2,0,bheight*4])
+	brick();
+translate([blength*3,0,bheight*4])
+echo([blength*3,0,bheight*4])
+	brick();
+translate([blength*4,0,bheight*4])
+echo([blength*4,0,bheight*4])
 	brick();
