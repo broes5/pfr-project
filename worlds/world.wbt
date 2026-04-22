@@ -1,25 +1,32 @@
 #VRML_SIM R2025a utf8
 
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/OldSteel.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/dji/mavic/protos/Mavic2Pro.proto"
-EXTERNPROTO "../protos/TestingGrounds.proto"
+;EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+;EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+;EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/OldSteel.proto"
+;EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/dji/mavic/protos/Mavic2Pro.proto"
+;EXTERNPROTO "../protos/TestingGrounds.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
 
 WorldInfo {
 }
+
 Viewpoint {
   orientation -0.16345356596711944 0.12110005392655275 0.9790902454378853 1.9437933233251052
   position 2.3792955688579887 -2.564436237714715 4.776305572033374
   follow "robot"
   followType "None"
 }
+
+RectangleArena {
+  floorSize 16 16
+}
+
 TexturedBackground {
 }
+
 TexturedBackgroundLight {
 }
-TestingGrounds {
-}
+
 DEF MY_ROBOT Robot {
   translation 0 8.58 4.73
   rotation 0 0.19611613513818404 0.9805806756909201 -2.5663706143591725
@@ -42,12 +49,15 @@ DEF MY_ROBOT Robot {
   boundingObject Box {
     size 0.8 0.7 0.1
   }
+
   physics Physics {
     density -1
     mass 2
   }
+
   controller "brain"
 }
+
 DEF Drone Mavic2Pro {
   translation -1.85003 8.2 3.5
   rotation 0 0 1 1.5708
