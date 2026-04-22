@@ -1,0 +1,28 @@
+brick: [23, 0, 0]
+brick: [46, 0, 0]
+brick: [69, 0, 0]
+brick: [92, 0, 0]
+new_layer
+brick: [11.5, 0, 8.6]
+brick: [34.5, 0, 8.6]
+brick: [57.5, 0, 8.6]
+brick: [80.5, 0, 8.6]
+brick: [103.5, 0, 8.6]
+new_layer
+brick: [0, 0, 17.2]
+brick: [23, 0, 17.2]
+brick: [46, 0, 17.2]
+brick: [69, 0, 17.2]
+brick: [92, 0, 17.2]
+new_layer
+brick: [11.5, 0, 25.8]
+brick: [34.5, 0, 25.8]
+brick: [57.5, 0, 25.8]
+brick: [80.5, 0, 25.8]
+brick: [103.5, 0, 25.8]
+new_layer
+brick: [0, 0, 34.4]
+brick: [23, 0, 34.4]
+brick: [46, 0, 34.4]
+brick: [69, 0, 34.4]
+brick: [92, 0, 34.4]
