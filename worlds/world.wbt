@@ -8,6 +8,10 @@
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
 
 WorldInfo {
+  info [
+    "A simulation of a drone swarm capable of assembling structures out of bricks."
+  ]
+  title "Aerial Brick by Brick"
 }
 
 Viewpoint {
@@ -58,8 +62,32 @@ DEF MY_ROBOT Robot {
   controller "brain"
 }
 
-DEF Drone Mavic2Pro {
-  translation -1.85003 8.2 3.5
-  rotation 0 0 1 1.5708
-  controller "brain"
+DEF BRICK {
+  translation 0 8.58 4.73
+  rotation 0 0.19611613513818404 0.9805806756909201 -2.5663706143591725
+  children [
+    DEF BRICK_VISUAL Transform {
+      scale 0.2 0.2 0.2
+      children [
+        Shape {
+          appearance OldSteel {
+          }
+          geometry Mesh {
+            url [
+              "../meshes/brick.stl"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+  boundingObject Box {
+    size 0.8 0.7 0.1
+  }
+
+  physics Physics {
+    density -1
+    mass 2
+  }
+
 }
