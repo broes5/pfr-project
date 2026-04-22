@@ -1,10 +1,5 @@
 #VRML_SIM R2025a utf8
 
-;EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
-;EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
-;EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/OldSteel.proto"
-;EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/dji/mavic/protos/Mavic2Pro.proto"
-;EXTERNPROTO "../protos/TestingGrounds.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
 
 WorldInfo {
@@ -62,12 +57,12 @@ DEF MY_ROBOT Robot {
   controller "brain"
 }
 
-DEF BRICK {
-  translation 0 8.58 4.73
+DEF BRICK Solid {
+  translation 0 5 2
   rotation 0 0.19611613513818404 0.9805806756909201 -2.5663706143591725
   children [
     DEF BRICK_VISUAL Transform {
-      scale 0.2 0.2 0.2
+      scale 0.02 0.02 0.02
       children [
         Shape {
           appearance OldSteel {
@@ -89,5 +84,4 @@ DEF BRICK {
     density -1
     mass 2
   }
-
-}
+} 
