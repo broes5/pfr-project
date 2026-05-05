@@ -8,27 +8,22 @@ WorldInfo {
   ]
   title "Aerial Brick by Brick"
 }
-
 Viewpoint {
-  orientation -0.16345356596711944 0.12110005392655275 0.9790902454378853 1.9437933233251052
-  position 2.3792955688579887 -2.564436237714715 4.776305572033374
+  orientation 0.3124984281107105 -0.04445000318773207 -0.9488777211237209 3.37937354531611
+  position 2.0844778617789856 2.15485421707806 4.874155723259083
   follow "robot"
   followType "None"
 }
-
 RectangleArena {
   floorSize 16 16
 }
-
 TexturedBackground {
 }
-
 TexturedBackgroundLight {
 }
-
 DEF MY_ROBOT Robot {
-  translation 0 8.58 4.73
-  rotation 0 0.19611613513818404 0.9805806756909201 -2.5663706143591725
+  translation -2.885712290969271 3.318210424892972 0.09282103090427475
+  rotation -0.5352983971067918 0.8446630122615707 -0.00014755374979274013 3.1347407504496476
   children [
     DEF DRONE_VISUAL Transform {
       scale 0.2 0.2 0.2
@@ -48,18 +43,17 @@ DEF MY_ROBOT Robot {
   boundingObject Box {
     size 0.8 0.7 0.1
   }
-
   physics Physics {
     density -1
     mass 2
   }
-
-  controller "brain"
+  controller "drone"
+  linearVelocity -0.001012576124773381 -0.0026053634487488322 -0.09278203305608834
+  angularVelocity 0.052124419495651726 -0.02025878620046041 0.00010637245984561333
 }
-
 DEF BRICK Solid {
-  translation 0 5 2
-  rotation 0 0.19611613513818404 0.9805806756909201 -2.5663706143591725
+  translation 6.5 6.5 0.0756076
+  rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
   children [
     DEF BRICK_VISUAL Transform {
       scale 0.02 0.02 0.02
@@ -77,11 +71,12 @@ DEF BRICK Solid {
     }
   ]
   boundingObject Box {
-    size 0.8 0.7 0.1
+    size 0.46 0.22 0.152
   }
-
   physics Physics {
     density -1
-    mass 2
+    mass 1
   }
-} 
+  linearVelocity -1.6851427241729153e-17 -5.9302417474762786e-18 1.4367639258169804e-17
+  angularVelocity 9.860761315262648e-32 9.08219803360954e-17 -5.4566368234267594e-18
+}
