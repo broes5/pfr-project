@@ -13,13 +13,23 @@ if errorlevel 1 (
 )
 
 echo.
-echo Installing numpy...
+echo Upgrading pip...
 python -m pip install --upgrade pip
-python -m pip install numpy
 
 echo.
-echo Verifying numpy installation...
+echo Installing dependencies from requirements.txt...
+python -m pip install -r "%~dp0requirements.txt"
+if errorlevel 1 (
+    echo.
+    echo ERROR: Failed to install dependencies.
+    pause
+    exit /b 1
+)
+
+echo.
+echo Verifying installation...
 python -c "import numpy; print('numpy', numpy.__version__, 'installed OK')"
 
 echo.
+echo Done.
 pause
