@@ -9,8 +9,8 @@ WorldInfo {
   title "Aerial Brick by Brick"
 }
 Viewpoint {
-  orientation 0.3124984281107105 -0.04445000318773207 -0.9488777211237209 3.37937354531611
-  position 2.0844778617789856 2.15485421707806 4.874155723259083
+  orientation 0.16820935366347906 0.028545346101883112 -0.9853378996851985 2.753090726682977
+  position 13.88311810950894 6.756236977762568 4.138900164196168
   follow "robot"
   followType "None"
 }
@@ -48,35 +48,2544 @@ DEF MY_ROBOT Robot {
     mass 2
   }
   controller "drone"
-  linearVelocity -0.001012576124773381 -0.0026053634487488322 -0.09278203305608834
-  angularVelocity 0.052124419495651726 -0.02025878620046041 0.00010637245984561333
 }
-DEF BRICK Solid {
-  translation 6.5 6.5 0.0756076
-  rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+DEF Bricks Group {
   children [
-    DEF BRICK_VISUAL Transform {
-      scale 0.02 0.02 0.02
+    DEF BRICK Solid {
+      translation 6.5 6 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
       children [
-        Shape {
-          appearance OldSteel {
-          }
-          geometry Mesh {
-            url [
-              "../meshes/brick.stl"
-            ]
-          }
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
         }
       ]
+      name "solid(3)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 6 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(68)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 5.7 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(13)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 5.7 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(31)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 5.7 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(72)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 5.4 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(11)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 5.4 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(34)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 5.4 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(28)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 5.1 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(18)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 5.1 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(37)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 5.1 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(77)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 4.8 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(19)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 4.5 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(43)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 4.5 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(52)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 4.5 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(83)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 4.2 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(46)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 4.2 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(55)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 4.2 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(86)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 3.9 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(49)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 3.9 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(58)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 3.9 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(61)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 4.8 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(40)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 4.8 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(80)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 5.7 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(12)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 5.7 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(32)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 5.7 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(73)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 5.4 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(14)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 5.4 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(35)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 5.4 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(75)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 5.1 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(17)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 5.1 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(38)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 5.1 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(78)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 4.8 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(20)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 4.5 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(44)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 4.5 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(53)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 4.5 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(84)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 4.2 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(47)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 4.2 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(56)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 4.2 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(87)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 3.9 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(50)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 3.9 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(59)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 3.9 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(89)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 4.8 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(41)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 4.8 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(81)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 6 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(1)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 6 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(29)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 6 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(70)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 6 0.075
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(69)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 6 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(2)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 6 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(30)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 6 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(71)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 5.7 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(10)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 5.7 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(33)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 5.7 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(74)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 5.1 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(15)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 5.1 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(39)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 5.1 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(79)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 4.8 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(21)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 4.5 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(45)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 4.5 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(54)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 4.5 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(85)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 4.2 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(48)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 4.2 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(57)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 4.2 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(88)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 3.9 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(51)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 3.9 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(60)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 3.9 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(90)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 4.8 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(42)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 4.8 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(82)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 5.4 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(16)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 5.4 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(36)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 5.4 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(76)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 6.3 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(7)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 6.3 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(27)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 6.3 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(67)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 6.3 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(6)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 6.3 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(26)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 6.3 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(66)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 6.3 0.0756076
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(4)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 6.3 0.0756076
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(25)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 6.3 0.0756076
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(65)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 6.6 0.0756076
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(5)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 6.6 0.0756076
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(22)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 6.6 0.0756076
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(62)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 6.6 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(8)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 6.6 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(23)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 6.6 0.25
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(63)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6.5 6.6 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(9)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 6 6.6 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(24)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
+    }
+    DEF BRICK Solid {
+      translation 5.5 6.6 0.43
+      rotation -0.013052608064900198 -0.19709888174879148 0.9802967205066434 1.3132628743982937e-16
+      children [
+        DEF BRICK_VISUAL Transform {
+          scale 0.02 0.02 0.02
+          children [
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/brick.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "solid(64)"
+      boundingObject Box {
+        size 0.46 0.22 0.152
+      }
+      physics Physics {
+        density -1
+        mass 1
+      }
     }
   ]
-  boundingObject Box {
-    size 0.46 0.22 0.152
-  }
-  physics Physics {
-    density -1
-    mass 1
-  }
-  linearVelocity -1.6851427241729153e-17 -5.9302417474762786e-18 1.4367639258169804e-17
-  angularVelocity 9.860761315262648e-32 9.08219803360954e-17 -5.4566368234267594e-18
+}
+DEF CONTROLLER Robot {
+  translation 6.6 0 0.3
+  children [
+    Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.5 0.5
+      }
+    }
+    Pose {
+    }
+  ]
+  name "CONTROLLER"
+  controller "controller"
 }
