@@ -1,12 +1,9 @@
 #VRML_SIM R2025a utf8
 
-#External Imports
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/OldSteel.proto"
-
-#Local Imports
 EXTERNPROTO "../protos/Brick.proto"
 
 WorldInfo {
@@ -16,8 +13,8 @@ WorldInfo {
   title "Aerial Brick by Brick"
 }
 Viewpoint {
-  orientation 0.08872670764399095 -0.0031488634131040583 -0.9960510308261638 3.10450554040294
-  position 3.9196828539531454 3.8402195621593664 1.4613791973148245
+  orientation 0.11701453667386778 -0.039017915190472034 -0.9923634417395621 3.6999937490156287
+  position 3.3344141942744296 0.6756339680796826 1.7593488153562895
   follow "robot"
   followType "None"
 }
@@ -55,10 +52,12 @@ DEF Drone Robot {
     mass 2
   }
   controller "drone"
-  linearVelocity -1.9716442462413775e-10 9.219548162736607e-11 7.083904826256736e-09
-  angularVelocity -1.8438371843410568e-09 -3.943133765041303e-09 1.3539070509346777e-18
 }
-
-#Example Brick Usage
-Brick { translation 6.5 6.5 0.0756  name "brick_01" }
-Brick { translation 7.0 6.5 0.0756  name "brick_02" }
+Brick {
+  translation 6.5 6.5 0.0756
+  name "brick_01"
+}
+Brick {
+  translation 7 6.5 0.0756
+  name "brick_02"
+}

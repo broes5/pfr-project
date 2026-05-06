@@ -2,6 +2,7 @@
 *.wbproj
 *.world.wbproj
 .cache/
+worlds/*.jpg
 
 # Webots runtime files
 runtime.ini
