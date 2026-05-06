@@ -4,7 +4,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/OldSteel.proto"
-EXTERNPROTO "../protos/Brick.proto"
+IMPORTABLE EXTERNPROTO "../protos/Brick.proto"
 
 WorldInfo {
   info [
@@ -14,7 +14,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation 0.11701453667386778 -0.039017915190472034 -0.9923634417395621 3.6999937490156287
-  position 3.3344141942744296 0.6756339680796826 1.7593488153562895
+  position 2.2413731686671468 -1.4322278563736477 0.9469278517610743
   follow "robot"
   followType "None"
 }
@@ -53,11 +53,8 @@ DEF Drone Robot {
   }
   controller "drone"
 }
-Brick {
-  translation 6.5 6.5 0.0756
-  name "brick_01"
-}
-Brick {
-  translation 7 6.5 0.0756
-  name "brick_02"
+Robot {
+  name "Brick Manager"
+  controller "brick_spawner"
+  supervisor TRUE
 }
