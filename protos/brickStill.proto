@@ -3,7 +3,7 @@
 
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/OldSteel.proto"
 
-PROTO Brick [
+PROTO BrickStill [
   field SFVec3f    translation  0 0 0.0756
   field SFRotation rotation     0 0 1 0
   field SFString   name         "brick"
@@ -29,12 +29,5 @@ PROTO Brick [
         ]
       }
     ]
-    boundingObject Box {
-      size 0.46 0.22 0.152
-    }
-    physics Physics {
-      density -1
-      mass 1
-    }
   }
 }

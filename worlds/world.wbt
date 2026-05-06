@@ -4,7 +4,9 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/OldSteel.proto"
-IMPORTABLE EXTERNPROTO "../protos/Brick.proto"
+
+IMPORTABLE EXTERNPROTO "../protos/BrickPhy.proto"
+IMPORTABLE EXTERNPROTO "../protos/BrickStill.proto"
 
 WorldInfo {
   info [
