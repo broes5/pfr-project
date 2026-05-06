@@ -1,10 +1,13 @@
 #VRML_SIM R2025a utf8
 
+#External Imports
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/OldSteel.proto"
 
+#Local Imports
+EXTERNPROTO "../protos/Brick.proto"
 
 WorldInfo {
   info [
@@ -55,32 +58,7 @@ DEF Drone Robot {
   linearVelocity -1.9716442462413775e-10 9.219548162736607e-11 7.083904826256736e-09
   angularVelocity -1.8438371843410568e-09 -3.943133765041303e-09 1.3539070509346777e-18
 }
-DEF BRICK Solid {
-  translation 6.5 6.5 0.07560766036221751
-  rotation -0.3230210343199767 0.14347673003890143 0.935452745639349 1.2343664479886786e-16
-  children [
-    DEF BRICK_VISUAL Transform {
-      scale 0.02 0.02 0.02
-      children [
-        Shape {
-          appearance OldSteel {
-          }
-          geometry Mesh {
-            url [
-              "../meshes/brick.stl"
-            ]
-          }
-        }
-      ]
-    }
-  ]
-  boundingObject Box {
-    size 0.46 0.22 0.152
-  }
-  physics Physics {
-    density -1
-    mass 1
-  }
-  linearVelocity 1.1514978671559755e-17 -2.2877351380460736e-17 -4.7273679842886915e-07
-  angularVelocity -2.9582283945787943e-31 -9.082198033609582e-17 1.6100845671486964e-17
-}
+
+#Example Brick Usage
+Brick { translation 6.5 6.5 0.0756  name "brick_01" }
+Brick { translation 7.0 6.5 0.0756  name "brick_02" }
