@@ -11,8 +11,7 @@ dt = timestep / 1000.0
 time = 0.0
 
 print("Starting up drone...")
-drone = Drone
-drone.init_devices(drone, robot, dt)
+drone = Drone(robot)
 
 while robot.step(timestep) != -1:
     time += dt
