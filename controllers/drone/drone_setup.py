@@ -1,4 +1,6 @@
-import numpy as np
+:x
+
+
 #from webots_drone.utils import bytes2image
 
 

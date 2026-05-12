@@ -7,6 +7,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 
 IMPORTABLE EXTERNPROTO "../protos/BrickPhy.proto"
 IMPORTABLE EXTERNPROTO "../protos/BrickStill.proto"
+IMPORTABLE EXTERNPROTO "../protos/BrickDrone.proto"
 
 WorldInfo {
   info [
@@ -27,34 +28,21 @@ TexturedBackground {
 }
 TexturedBackgroundLight {
 }
-DEF Drone Robot {
+
+BrickDrone {
+  controller "drone"
   translation -2.7689873671099106 3.263251716043129 0.04921519909770945
   rotation -1.7733300483924902e-10 2.7755924421850723e-10 -1 2.0118653855962845
   children [
     DEF DRONE_VISUAL Transform {
       scale 0.2 0.2 0.2
-      children [
-        Shape {
-          appearance OldSteel {
-          }
-          geometry Mesh {
-            url [
-              "../meshes/drone.stl"
-            ]
-          }
-        }
-      ]
     }
   ]
   boundingObject Box {
     size 0.8 0.7 0.1
   }
-  physics Physics {
-    density -1
-    mass 2
-  }
-  controller "drone"
 }
+
 Robot {
   name "Brick Manager"
   controller "brick_spawner"
