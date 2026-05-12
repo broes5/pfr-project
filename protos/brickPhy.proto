@@ -22,7 +22,7 @@ PROTO BrickPhy [
             }
             geometry Mesh {
               url [
-                "../meshes/brick.stl"
+                "../meshes/brick.obj"
               ]
             }
           }
