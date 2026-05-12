@@ -10,8 +10,6 @@ robot = Robot()
 timestep = int(robot.getBasicTimeStep())
 dt = timestep / 1000.0
 
-time = 0.0
-
 fl = robot.getDevice('front left propeller')
 fr = robot.getDevice('front right propeller')
 rl = robot.getDevice('rear left propeller')

@@ -3,8 +3,6 @@
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
-IMPORTABLE EXTERNPROTO "../protos/BrickPhy.proto"
-IMPORTABLE EXTERNPROTO "../protos/BrickStill.proto"
 IMPORTABLE EXTERNPROTO "../protos/BrickDrone.proto"
 
 WorldInfo {
@@ -14,8 +12,8 @@ WorldInfo {
   title "Aerial Brick by Brick"
 }
 Viewpoint {
-  orientation 0.11788874674158888 0.11930635346588518 -0.9858337777812093 1.488327237575121
-  position -2.8499586254150944 4.364422923155227 0.3278856493578524
+  orientation 0.08054258323882661 0.9887772558174526 -0.12582698702315348 1.0163856821144468
+  position -3.440447895035059 3.4799470854719647 0.8748549421126278
   follow "robot"
   followType "None"
 }
@@ -28,9 +26,7 @@ TexturedBackgroundLight {
 }
 BrickDrone {
   translation -2.7689873671099106 3.263251716043129 0.04921519909770945
-  rotation -1.7733300483924902e-10 2.7755924421850723e-10 -1 2.0118653855962845
-  bodySlot []
-  controller "drone"
+  rotation 0 0 1 2.7488896938995744
 }
 Robot {
   name "Brick Manager"
