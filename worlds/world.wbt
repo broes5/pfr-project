@@ -4,6 +4,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 IMPORTABLE EXTERNPROTO "../protos/BrickDrone.proto"
+IMPORTABLE EXTERNPROTO "../protos/BrickStill.proto"
+IMPORTABLE EXTERNPROTO "../protos/BrickPhy.proto"
 
 WorldInfo {
   info [
@@ -12,8 +14,8 @@ WorldInfo {
   title "Aerial Brick by Brick"
 }
 Viewpoint {
-  orientation 0.08054258323882661 0.9887772558174526 -0.12582698702315348 1.0163856821144468
-  position -3.440447895035059 3.4799470854719647 0.8748549421126278
+  orientation 0.1408520852217339 0.38970714918681865 -0.9101038555908727 0.6810298610969417
+  position -6.048647284008737 7.831435635545935 2.919744155747303
   follow "robot"
   followType "None"
 }

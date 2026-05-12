@@ -1,38 +1,34 @@
 SCALE = 0.02
-LAYER_HEIGHT = 0
+Z_SCALE = 0.02
 
 def parse_brick_file(path):
     bricks = []
-    layer = 0
 
     with open(path, "r") as f:
-        for raw_line in f:
+        for lineno, raw_line in enumerate(f, start=1):
             line = raw_line.strip()
 
-            if not line or line.startswith("#"):
+            if not line or line.startswith("#") or line == "new_layer":
                 continue
 
-            if line == "new_layer":
-                layer += 1
+            parts = line.split()
+            if len(parts) != 4:
+                print(f"Line {lineno}: skipping malformed line: {raw_line!r}")
                 continue
 
-            if line.startswith("brick"):
-                coords_str = line.split(" ", 1)[1].strip()
-                parts = [p.strip() for p in coords_str.split(" ")]
-                if len(parts) != 4:
-                    print(f"Skipping malformed line: {raw_line!r}")
-                    continue
+            try:
                 x, y, z, theta = (float(p) for p in parts)
-                bricks.append((x, y, z, theta, layer))
+            except ValueError:
+                print(f"Line {lineno}: non-numeric value: {raw_line!r}")
                 continue
 
-            print(f"Unknown line, skipping: {raw_line!r}")
+            brick = (x, y, z, theta)
+            if bricks and bricks[-1] == brick:
+                continue
+            bricks.append(brick)
 
     return bricks
 
 
-def to_world_coords(bricks, scale=SCALE, layer_height=LAYER_HEIGHT):
-    return [
-        (x * scale, y * scale, z * scale + layer * layer_height, theta)
-        for (x, y, z, theta, layer) in bricks
-    ]
+def to_world_coords(bricks, scale=SCALE):
+    return [(x * scale, y * scale, z * Z_SCALE, theta) for x, y, z, theta in bricks]
