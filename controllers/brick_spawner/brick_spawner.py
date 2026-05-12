@@ -10,8 +10,10 @@ timestep = int(supervisor.getBasicTimeStep())
 
 placer = BrickPlacer(supervisor)
 raw_bricks = parse_brick_file(BRICK_FILE)
-positions = to_world_coords(raw_bricks)
-placer.spawn_many(positions, physics=False)
 
+bricks = to_world_coords(raw_bricks)
+placer.spawn_many(bricks, physics=False)
+
+# This needs to exist otherwise Webots sometimes gets upset
 while supervisor.step(timestep) != -1:
     pass
