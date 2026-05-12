@@ -29,8 +29,8 @@ gyro.enable(timestep)
 kb = robot.getKeyboard();
 kb.enable(timestep)
 
-camera_roll_motor = robot.getDevice('camera roll')
-camera_pitch_motor = robot.getDevice('camera pitch')
+#camera_roll_motor = robot.getDevice('camera roll')
+#camera_pitch_motor = robot.getDevice('camera pitch')
 
 K_VERTICAL_THRUST = 68.5
 K_VERTICAL_OFFSET = 0.6
@@ -116,8 +116,8 @@ while robot.step(timestep) != -1:
     if state == DONE:
         for m in [fl, fr, rl, rr]:
             m.setVelocity(0.0)
-            camera_roll_motor.setPosition(0.0)
-            camera_pitch_motor.setPosition(0.0)
+            #camera_roll_motor.setPosition(0.0)
+            #camera_pitch_motor.setPosition(0.0)
         continue # skip PID and mixer this step
 
     # ── LAND — staged descent
@@ -152,6 +152,6 @@ while robot.step(timestep) != -1:
     rr.setVelocity( rr_v) # clockwise — positive
 
     # ── Camera gimbal
-    camera_roll_motor.setPosition( -0.115 * roll_vel)
-    camera_pitch_motor.setPosition(-0.1 * pitch_vel)
+    #camera_roll_motor.setPosition( -0.115 * roll_vel)
+    #camera_pitch_motor.setPosition(-0.1 * pitch_vel)
 
