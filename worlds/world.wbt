@@ -30,6 +30,7 @@ BrickDrone {
   translation -2.7689873671099106 3.263251716043129 0.04921519909770945
   rotation -1.7733300483924902e-10 2.7755924421850723e-10 -1 2.0118653855962845
   bodySlot []
+  controller "drone"
 }
 Robot {
   name "Brick Manager"
