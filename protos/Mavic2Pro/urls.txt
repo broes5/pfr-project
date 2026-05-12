@@ -1,0 +1,6 @@
+https://raw.githubusercontent.com/cyberbotics/webots/master/projects/robots/dji/mavic/protos/Mavic2Pro/meshes/helix_a_joint.obj
+https://raw.githubusercontent.com/cyberbotics/webots/master/projects/robots/dji/mavic/protos/Mavic2Pro/meshes/helix_b_joint.obj
+https://raw.githubusercontent.com/cyberbotics/webots/master/projects/robots/dji/mavic/protos/Mavic2Pro/meshes/helix_a.obj
+https://raw.githubusercontent.com/cyberbotics/webots/master/projects/robots/dji/mavic/protos/Mavic2Pro/meshes/helix_b.obj
+https://raw.githubusercontent.com/cyberbotics/webots/master/projects/robots/dji/mavic/protos/Mavic2Pro/meshes/helix_a_plates.obj
+https://raw.githubusercontent.com/cyberbotics/webots/master/projects/robots/dji/mavic/protos/Mavic2Pro/meshes/helix_b_plates.obj
