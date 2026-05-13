@@ -6,6 +6,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 IMPORTABLE EXTERNPROTO "../protos/BrickDrone.proto"
 IMPORTABLE EXTERNPROTO "../protos/BrickStill.proto"
 IMPORTABLE EXTERNPROTO "../protos/BrickPhy.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/dji/mavic/protos/Mavic2Pro.proto"
 
 WorldInfo {
   info [
@@ -15,7 +16,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation 0.1408520852217339 0.38970714918681865 -0.9101038555908727 0.6810298610969417
-  position -6.048647284008737 7.831435635545935 2.919744155747303
+  position -7.321662705071857 6.258483655308593 2.508588712477079
   follow "robot"
   followType "None"
 }
@@ -34,4 +35,9 @@ Robot {
   name "Brick Manager"
   controller "brick_spawner"
   supervisor TRUE
+}
+Mavic2Pro {
+  translation -2.74 2.53 0.2
+  name "Mavic2Pro"
+  controller "drone"
 }

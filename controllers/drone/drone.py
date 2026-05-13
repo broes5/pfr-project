@@ -155,7 +155,7 @@ while robot.step(timestep) != -1:
     if state == TAKEOFF and abs(gpsAlt - TAKEOFF_ALT) < ALT_REACHED:
         targetX = xPos
         targetY = yPos
-        targetYaW = yaw
+        targetYaw = yaw
         state = FLY
         print(f'>> TAKEOFF COMPLETE. Holding position at X:{targetX:.2f}, Y:{targetY:.2f}. Switching to fly state')
     
