@@ -1,7 +1,11 @@
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'shared'))
+
 from controller import Supervisor
 
 from brick_parser import parse_brick_file, to_world_coords
 from brick_placer import BrickPlacer
+from vector3 import Vector3
 
 BRICK_FILE = "instructions/uni1.txt"
 

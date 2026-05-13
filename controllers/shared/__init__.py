@@ -1,0 +1,1 @@
+"""Shared data structures and utilities for controllers."""
