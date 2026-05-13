@@ -37,8 +37,6 @@ for m in [fl, fr, rl, rr]:
 imu = robot.getDevice('inertial unit'); imu.enable(timestep)
 gyro = robot.getDevice('gyro'); gyro.enable(timestep)
 gps = robot.getDevice('gps'); gps.enable(timestep)
-camera_roll_motor = robot.getDevice('camera roll')
-camera_pitch_motor = robot.getDevice('camera pitch')
 kb = robot.getKeyboard(); kb.enable(timestep)
 
 # ── TUNED CONSTANTS ──────────────────
@@ -238,10 +236,4 @@ while robot.step(timestep) != -1:
     if state == DONE:
         for m in [fl, fr, rl, rr]:
             m.setVelocity(0.0)
-            camera_roll_motor.setPosition(0.0)
-            camera_pitch_motor.setPosition(0.0)
             continue # skip PID and mixer this step
-            
-    # 10. Camera Gimbal
-    camera_roll_motor.setPosition(-0.115 * roll_vel)
-    camera_pitch_motor.setPosition(-0.1 * pitch_vel)
