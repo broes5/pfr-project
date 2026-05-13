@@ -1,0 +1,38 @@
+#VRML_SIM R2025a utf8
+# Brick Prefab/Prototype
+
+PROTO Brick [
+  field SFVec3f    translation  0 0 0.0756
+  field SFRotation rotation     0 0 1 0
+  field SFString   name         "brick"
+]
+{
+  Solid {
+    translation IS translation
+    rotation IS rotation
+    name IS name
+    children [
+      Transform {
+        scale 0.02 0.02 0.02
+        children [
+          Shape {
+            appearance OldSteel {
+            }
+            geometry Mesh {
+              url [
+                "../meshes/brick.stl"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+    boundingObject Box {
+      size 0.46 0.22 0.152
+    }
+    physics Physics {
+      density -1
+      mass 1
+    }
+  }
+}

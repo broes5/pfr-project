@@ -42,7 +42,7 @@ kb = robot.getKeyboard(); kb.enable(timestep)
 # ── TUNED CONSTANTS ──────────────────
 K_VERTICAL_THRUST = 68.5 # thrust required to counteract gravity
 K_VERTICAL_OFFSET = 0.6 # offset to hover on target altitude due to the drones mass
-K_VERTICAL_P = 3.0 # rate of aggression towards reaching target altitude
+K_VERTICAL_P = 2.0 # rate of aggression towards reaching target altitude
 
 # Attitude (Tilt) Constants
 K_ROLL_P = 15.0 # rate of aggression towards reaching roll angle
