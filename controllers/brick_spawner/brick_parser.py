@@ -1,8 +1,3 @@
-import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'shared'))
-
-from vector3 import Vector3
-
 SCALE = 0.02
 Z_SCALE = 0.02
 
@@ -36,4 +31,4 @@ def parse_brick_file(path):
 
 
 def to_world_coords(bricks, scale=SCALE):
-    return [(Vector3(x * scale, y * scale, z * Z_SCALE), theta) for x, y, z, theta in bricks]
+    return [(x * scale, y * scale, z * Z_SCALE, theta) for x, y, z, theta in bricks]
