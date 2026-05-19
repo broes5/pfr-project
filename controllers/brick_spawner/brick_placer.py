@@ -1,50 +1,65 @@
-import math
+import sys, os, math
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'shared'))
 
-class BrickPlacer:
+from vector3 import Vector3
+
+POOL_POSITION = Vector3(0, 0, -10)
+BRICK_HALF_HEIGHT = 0.075
+
+class BrickPool:
     def __init__(self, supervisor):
         self.supervisor = supervisor
         self.root_children = supervisor.getRoot().getField("children")
-        self._holders = {}
+        self._pool = []
+        self._active = {}
+        self._holder = None
 
-    def _get_or_create_holder(self, holder_name):
-        if holder_name in self._holders:
-            return self._holders[holder_name]
-
-        existing = self.supervisor.getFromDef(holder_name)
+    def _ensure_holder(self):
+        if self._holder is not None:
+            return self._holder
+        existing = self.supervisor.getFromDef("Bricks")
         if existing is None:
-            holder_string = (
-                f'DEF {holder_name} Pose {{ '
-                f'translation 0 0 0 '
-                f'children [] '
+            self.root_children.importMFNodeFromString(
+                -1, 'DEF Bricks Pose { translation 0 0 0 children [] }'
+            )
+            existing = self.supervisor.getFromDef("Bricks")
+        self._holder = existing.getField("children")
+        return self._holder
+
+    def pre_spawn(self, count, physics=False):
+        holder = self._ensure_holder()
+        proto = "BrickPhy" if physics else "BrickStill"
+        p = POOL_POSITION
+        for _ in range(count):
+            node_str = (
+                f'{proto} {{ '
+                f'translation {p.x} {p.y} {p.z} '
+                f'rotation 0 0 1 0 '
                 f'}}'
             )
-            self.root_children.importMFNodeFromString(-1, holder_string)
-            existing = self.supervisor.getFromDef(holder_name)
+            holder.importMFNodeFromString(-1, node_str)
+            self._pool.append(holder.getMFNode(holder.getCount() - 1))
+        print(f"Pre-spawned {count} bricks into pool (physics={physics}).")
 
-        children_field = existing.getField("children")
-        self._holders[holder_name] = children_field
-        return children_field
-
-    def spawn_brick(self, name, x, y, z, theta, physics=True, holder="Bricks"):
-        proto_name = "BrickPhy" if physics else "BrickStill"
-        z += 0.15 / 2
+    def spawn(self, brick_id, position: Vector3, theta: float):
+        if not self._pool:
+            raise RuntimeError("Brick pool exhausted — call pre_spawn with a larger count")
+        node = self._pool.pop()
         rad = theta * math.pi / 180
+        node.getField("translation").setSFVec3f([position.x, position.y, position.z + BRICK_HALF_HEIGHT])
+        node.getField("rotation").setSFRotation([0, 0, 1, rad])
+        self._active[brick_id] = node
 
-        brick_string = (
-            f'{proto_name} {{ '
-            f'translation {x} {y} {z} '
-            f'rotation 0 0 1 {rad} '
-            f'name "{name}" '
-            f'}}'
-        )
+    def despawn(self, brick_id):
+        node = self._active.pop(brick_id, None)
+        if node is None:
+            return
+        node.getField("translation").setSFVec3f(POOL_POSITION.to_list())
+        self._pool.append(node)
 
-        children_field = self._get_or_create_holder(holder)
-        children_field.importMFNodeFromString(-1, brick_string)
+    def get(self, brick_id):
+        return self._active.get(brick_id)
 
-    def spawn_many(self, bricks, name_prefix="brick", physics=True, holder="Bricks"):
-        for i, (x, y, z, theta) in enumerate(bricks):
-            self.spawn_brick(
-                f"{name_prefix}_{i:03d}", x, y, z, theta,
-                physics=physics, holder=holder,
-            )
-        print(f"Spawned {len(bricks)} bricks into '{holder}' (physics={physics}).")
+    @staticmethod
+    def brick_name(brick_id: int) -> str:
+        return f"brick_{brick_id:03d}"

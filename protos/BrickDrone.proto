@@ -1,4 +1,5 @@
 #VRML_SIM R2025a utf8
+
 # Most of this has been wisely appropriated from the Webots
 # Mavic 2 Pro example world.
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
@@ -33,7 +34,7 @@ Robot {
       children IS bodySlot
     }
     Transform {
-      translation -0.05 0 -0.01
+      #translation -0.05 0 -0.01
       rotation 0 0 1 1.5708
       scale 0.1 0.1 0.1
       children [
@@ -56,7 +57,7 @@ Robot {
     }
     DEF REAR_LEFT_HP_HELIX Propeller {
       shaftAxis 0 0 1
-      centerOfThrust -0.177179 0.127453 -0.0320282
+      centerOfThrust -0.15 0.15 -0.00280468
       thrustConstants -0.00026 0
       torqueConstants 0.0000052 0
       fastHelixThreshold 50
@@ -66,7 +67,7 @@ Robot {
         maxTorque 30.0
       }
       fastHelix Solid {
-        translation -0.177179 0.127453 -0.0320282
+      	translation -0.15 0.15 -0.00280468
         children [
           Shape {
             appearance DEF METAL_APPEARANCE PBRAppearance {
@@ -120,13 +121,10 @@ Robot {
             }
           ]
         }
-        physics Physics {
-          density -1
-          mass 0.1
-        }
+        physics Physics {}
       }
       slowHelix Solid {
-        translation -0.177179 0.127453 -0.0320282
+      	translation -0.15 0.15 -0.00280468
         children [
           Shape {
             appearance DEF GREY_PLASTIC PBRAppearance {
@@ -176,15 +174,12 @@ Robot {
             }
           ]
         }
-        physics Physics {
-          density -1
-          mass 0.1
-        }
+        physics Physics {}
       }
     }
     DEF REAR_RIGHT_HP_HELIX Propeller {
       shaftAxis 0 0 1
-      centerOfThrust -0.177179 -0.127453 -0.0320282
+      centerOfThrust -0.15 -0.15 -0.00280468
       thrustConstants 0.00026 0
       torqueConstants 0.0000052 0
       fastHelixThreshold 50
@@ -194,7 +189,7 @@ Robot {
         maxTorque 30.0
       }
       fastHelix Solid {
-        translation -0.177179 -0.127453 -0.0320282
+      	translation -0.15 -0.15 -0.00280468
         children [
           Shape {
             appearance USE METAL_APPEARANCE
@@ -244,13 +239,10 @@ Robot {
             }
           ]
         }
-        physics Physics {
-          density -1
-          mass 0.1
-        }
+        physics Physics {}
       }
       slowHelix Solid {
-        translation -0.177179 -0.127453 -0.0320282
+      	translation -0.15 -0.15 -0.00280468
         children [
           Shape {
             appearance MattePaint {
@@ -298,15 +290,12 @@ Robot {
             }
           ]
         }
-        physics Physics {
-          density -1
-          mass 0.1
-        }
+        physics Physics {}
       }
     }
     DEF FRONT_RIGHT_HP_HELIX Propeller {
       shaftAxis 0 0 1
-      centerOfThrust 0.0548537 -0.151294 -0.00280468
+      centerOfThrust 0.15 -0.15 -0.00280468
       thrustConstants -0.00026 0
       torqueConstants 0.0000052 0
       fastHelixThreshold 50
@@ -316,7 +305,7 @@ Robot {
         maxTorque 30.0
       }
       fastHelix Solid {
-        translation 0.0548537 -0.151294 -0.00280468
+        translation 0.15 -0.15 -0.00280468
         children [
           Shape {
             appearance USE METAL_APPEARANCE
@@ -366,13 +355,10 @@ Robot {
             }
           ]
         }
-        physics Physics {
-          density -1
-          mass 0.1
-        }
+        physics Physics {}
       }
       slowHelix Solid {
-        translation 0.0548537 -0.151294 -0.00280468
+        translation 0.15 -0.15 -0.00280468
         children [
           Shape {
             appearance MattePaint {
@@ -420,15 +406,12 @@ Robot {
             }
           ]
         }
-        physics Physics {
-          density -1
-          mass 0.1
-        }
+        physics Physics {}
       }
     }
     DEF FRONT_LEFT_HP_HELIX Propeller {
       shaftAxis 0 0 1
-      centerOfThrust 0.0548537 0.151294 -0.00280468
+      centerOfThrust 0.15 0.15 -0.00280468
       thrustConstants 0.00026 0
       torqueConstants 0.0000052 0
       fastHelixThreshold 50
@@ -438,7 +421,7 @@ Robot {
         maxTorque 30.0
       }
       fastHelix Solid {
-        translation 0.0548537 0.151294 -0.00280468
+        translation 0.15 0.15 -0.00280468
         children [
           Shape {
             appearance USE METAL_APPEARANCE
@@ -488,13 +471,10 @@ Robot {
             }
           ]
         }
-        physics Physics {
-          density -1
-          mass 0.1
-        }
+        physics Physics {}
       }
       slowHelix Solid {
-        translation 0.0548537 0.151294 -0.00280468
+        translation 0.15 0.15 -0.00280468
         children [
           Shape {
             appearance MattePaint {
@@ -542,10 +522,7 @@ Robot {
             }
           ]
         }
-        physics Physics {
-          density -1
-          mass 0.1
-        }
+        physics Physics {}
       }
     }
   ]
@@ -554,72 +531,10 @@ Robot {
   boundingObject Group {
     children [
       Pose {
-        translation -0.03 0 0.002
+        translation 0 0 0
         children [
           Box {
-            size 0.21 0.085 0.027
-          }
-        ]
-      }
-      Pose {
-        translation -0.06 0 -0.03
-        children [
-          Box {
-            size 0.15 0.06 0.053
-          }
-        ]
-      }
-      Pose {
-        translation 0.03 0.09 -0.001
-        rotation 0 0 1 -0.3926996938995747
-        children [
-          Box {
-            size 0.01 0.15 0.025
-          }
-        ]
-      }
-      Pose {
-        translation 0.03 -0.09 -0.001
-        rotation 0 0 1 0.3927
-        children [
-          Box {
-            size 0.01 0.15 0.025
-          }
-        ]
-      }
-      Pose {
-        translation -0.138 0.08 -0.032
-        rotation 0 0 1 0.68
-        children [
-          Box {
-            size 0.01 0.12 0.018
-          }
-        ]
-      }
-      Pose {
-        translation -0.138 -0.08 -0.032
-        rotation 0 0 1 -0.68
-        children [
-          Box {
-            size 0.01 0.12 0.018
-          }
-        ]
-      }
-      Pose {
-        translation 0.06 0.15 -0.039
-        rotation 1 0 0 -0.29
-        children [
-          Box {
-            size 0.01 0.014 0.06
-          }
-        ]
-      }
-      Pose {
-        translation 0.06 -0.15 -0.039
-        rotation 1 0 0 0.29
-        children [
-          Box {
-            size 0.01 0.014 0.06
+            size 0.25 0.15 0.05
           }
         ]
       }
@@ -627,7 +542,7 @@ Robot {
   }
   physics Physics {
     density -1
-    mass 0.4
+    mass 0.5
   }
   controller IS controller
   controllerArgs IS controllerArgs
@@ -638,4 +553,3 @@ Robot {
   battery IS battery
 }
 }
-
