@@ -32,17 +32,13 @@ TexturedBackground {
 }
 TexturedBackgroundLight {
 }
-BrickDrone {
-  translation -2.7689873671099106 3.263251716043129 0.04921519909770945
-  rotation 0 0 1 2.7488896938995744
-}
 Robot {
   name "Brick Manager"
   controller "brick_spawner"
   supervisor TRUE
 }
-Mavic2Pro {
-  translation -2.74 2.53 0.2
-  name "Mavic2Pro"
-  controller "drone"
+Robot {
+  name "Drone Spawner"
+  controller "drone_spawner"
+  supervisor TRUE
 }
