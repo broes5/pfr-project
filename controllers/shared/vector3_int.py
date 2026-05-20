@@ -21,3 +21,11 @@ class Vector3Int:
 
     def __repr__(self):
         return f"Vector3Int({self.x}, {self.y}, {self.z})"
+
+    @staticmethod
+    def min(a, b):
+        return Vector3Int(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z))
+
+    @staticmethod
+    def max(a, b):
+        return Vector3Int(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z))

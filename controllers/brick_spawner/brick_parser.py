@@ -1,7 +1,7 @@
 import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'shared'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from vector3 import Vector3
+from shared.vector3 import Vector3
 
 SCALE = 0.02
 Z_SCALE = 0.02

@@ -1,7 +1,7 @@
 import sys, os, math
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'shared'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from vector3 import Vector3
+from shared.vector3 import Vector3
 
 POOL_POSITION = Vector3(0, 0, -10)
 BRICK_HALF_HEIGHT = 0.075

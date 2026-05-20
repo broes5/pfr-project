@@ -68,6 +68,14 @@ class Vector3:
         t = max(0.0, min(1.0, t))
         return a + (b - a) * t
 
+    @staticmethod
+    def min(a, b):
+        return Vector3(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z))
+
+    @staticmethod
+    def max(a, b):
+        return Vector3(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z))
+
 # Constants
 Vector3.zero    = Vector3(0, 0, 0)
 Vector3.one     = Vector3(1, 1, 1)
