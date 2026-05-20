@@ -40,4 +40,4 @@ while supervisor.step(timestep) != -1:
             brick_index -= 1
 
             if brick_index < 0:
-                state == 'NONE'
+                state = 'NONE'
