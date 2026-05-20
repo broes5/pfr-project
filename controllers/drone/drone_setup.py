@@ -12,7 +12,7 @@ def clamp(value, low, high):
 robot = Robot()
 timestep = int(robot.getBasicTimeStep())
 dt = timestep / 1000.0
-droneNum = 0
+drone_name = robot.getName()
 
 # ── State machine constants
 IDLE, TAKEOFF, FLY, LAND, DONE = 'IDLE', 'TAKEOFF', 'FLY', 'LAND', 'DONE'

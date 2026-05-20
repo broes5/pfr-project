@@ -24,6 +24,8 @@ Robot {
   name IS name
   model "Controller device"
   children [
+    Emitter {
+    }
     Transform {
       scale IS size
       children [
@@ -53,6 +55,6 @@ Robot {
   }
   physics IS physics
   contactMaterial IS contactMaterial
-  controller "controller"
+  controller "controller_main"
 }
 }

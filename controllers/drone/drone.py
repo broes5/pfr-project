@@ -20,18 +20,26 @@ while robot.step(timestep) != -1:
             packet = receiver.getString()
             parts = packet.split()
             
-            if len(parts) == 4 and parts[0] == 'TARGET':
+            if len(parts) == 5 and parts[0] == drone_name and parts[1] == 'TARGET':
                 try:
-                    targetPos.x = float(parts[1])
-                    targetPos.y = float(parts[2])
-                    targetPos.z = float(parts[3])
+                    targetPos.x = float(parts[2])
+                    targetPos.y = float(parts[3])
+                    targetPos.z = float(parts[4])
                     print(f"[COMMS] New target received: X:{targetPos.x:.2f} Y:{targetPos.y:.2f} Z:{targetPos.z:.2f}")
                 except:
                     print(f"[COMMS] Error parsing coordinate data.")
+            elif len(parts) == 2 and parts[0] == drone_name and parts[1] == 'TAKEOFF':
+                if state == IDLE:
+                    targetPos.x = currentPos.x
+                    targetPos.y = currentPos.y
+                    targetPos.z = TAKEOFF_ALT
+                    targetYaw = yaw
+                    state = TAKEOFF
+                    print(f'>> [COMMS] TAKEOFF command received')
             receiver.nextPacket()
     # send drone's current status (current and target location) at twice the speed of the print counter
     if emitter and print_counter % 50 == 0:
-        status_msg = f"CURRENTPOS {currentPos.x:.2f} {currentPos.y:.2f} {currentPos.z:.2f} TARGETPOS {targetPos.x:.2f} {targetPos.y:.2f} {targetPos.z:.2f}"
+        status_msg = f"{drone_name} CURRENTPOS {currentPos.x:.2f} {currentPos.y:.2f} {currentPos.z:.2f} TARGETPOS {targetPos.x:.2f} {targetPos.y:.2f} {targetPos.z:.2f}"
         emitter.send(status_msg.encode('utf-8'))
     
     # 2. Filtered Velocity Calculation

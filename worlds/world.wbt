@@ -32,10 +32,6 @@ TexturedBackground {
 }
 TexturedBackgroundLight {
 }
-BrickDrone {
-  translation -2.7689873670355394 3.263251714494426 0.024950950000000006
-  rotation 2.943795259363603e-16 9.614500171302124e-17 1 0.04797717593268928
-}
 Robot {
   name "Brick Manager"
   controller "brick_spawner"
