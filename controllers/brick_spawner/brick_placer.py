@@ -31,6 +31,7 @@ class BrickPool:
         holder = self._ensure_holder()
         proto = "BrickPhy" if physics else "BrickStill"
         p = POOL_POSITION
+        start_index = holder.getCount()
         for _ in range(count):
             node_str = (
                 f'{proto} {{ '
@@ -39,7 +40,11 @@ class BrickPool:
                 f'}}'
             )
             holder.importMFNodeFromString(-1, node_str)
-            self._pool.append(holder.getMFNode(holder.getCount() - 1))
+        # importMFNodeFromString is not synchronous on all platforms — step once
+        # to flush pending imports before reading back node references.
+        self.supervisor.step(int(self.supervisor.getBasicTimeStep()))
+        for i in range(start_index, holder.getCount()):
+            self._pool.append(holder.getMFNode(i))
         print(f"Pre-spawned {count} bricks into pool (physics={physics}).")
 
     def spawn(self, brick_id, state: BrickState):
