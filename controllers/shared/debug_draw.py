@@ -14,13 +14,13 @@ class DebugDraw:
         dbg.clear()
     """
 
-    def __init__(self, supervisor):
+    def __init__(self, supervisor, name='__DEBUG__'):
         self._supervisor = supervisor
-        self._group = supervisor.getFromDef('__DEBUG__')
+        self._group = supervisor.getFromDef(name)
         if self._group is None:
             root_children = supervisor.getRoot().getField('children')
-            root_children.importMFNodeFromString(-1, 'DEF __DEBUG__ Group { children [] }')
-            self._group = supervisor.getFromDef('__DEBUG__')
+            root_children.importMFNodeFromString(-1, f'DEF {name} Group {{ children [] }}')
+            self._group = supervisor.getFromDef(name)
         self._children = self._group.getField('children')
 
     def clear(self):

@@ -12,7 +12,7 @@ BRICK_FILE = "instructions/uni1.txt"
 
 supervisor = Supervisor()
 timestep = int(supervisor.getBasicTimeStep())
-dbg = DebugDraw(supervisor)
+dbg = DebugDraw(supervisor, '__DEBUG_BRICK_SPAWNER__')
 
 pool = BrickPool(supervisor)
 raw_bricks = parse_brick_file(BRICK_FILE)
