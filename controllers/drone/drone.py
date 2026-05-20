@@ -17,7 +17,7 @@ while robot.step(timestep) != -1:
     if receiver and receiver.getQueueLength() > 0:
         while receiver.getQueueLength() > 0:
             # assume incoming string format is: "TARGET X Y Z"
-            packet = receiver.getData().decode('utf-8')
+            packet = receiver.getString()
             parts = packet.split()
             
             if len(parts) == 4 and parts[0] == 'TARGET':
