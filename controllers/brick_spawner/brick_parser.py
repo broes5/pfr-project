@@ -2,6 +2,7 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from shared.vector3 import Vector3
+from shared.brick_state import BrickState
 
 SCALE = 0.02
 Z_SCALE = 0.02
@@ -36,4 +37,4 @@ def parse_brick_file(path):
 
 
 def to_world_coords(bricks, scale=SCALE):
-    return [(Vector3(x * scale, y * scale, z * Z_SCALE), theta) for x, y, z, theta in bricks]
+    return [BrickState(Vector3(x * scale, y * scale, z * Z_SCALE), theta) for x, y, z, theta in bricks]

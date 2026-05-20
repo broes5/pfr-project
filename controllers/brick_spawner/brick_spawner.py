@@ -20,7 +20,7 @@ raw_bricks = parse_brick_file(BRICK_FILE)
 bricks = to_world_coords(raw_bricks)
 
 # Calculate Bounds
-positions = [pos for pos, _ in bricks]
+positions = [b.position for b in bricks]
 bounds_min = positions[0]
 bounds_max = positions[0]
 for pos in positions[1:]:
@@ -32,10 +32,10 @@ boundsCenter = (bounds_min + bounds_max) * 0.5
 
 pool.pre_spawn(len(bricks), physics=False)
 
-SPAWN_INTERVAL = 200 
+SPAWN_INTERVAL = 200
 brick_index = 0
 elapsed = 0
-state = 'SPAWN'
+phase = 'SPAWN'
 
 while supervisor.step(timestep) != -1:
     dbg.clear()
@@ -44,17 +44,16 @@ while supervisor.step(timestep) != -1:
     elapsed += timestep
     if elapsed >= SPAWN_INTERVAL:
         elapsed -= SPAWN_INTERVAL
-        
-        if state == 'SPAWN' and brick_index < len(bricks):
-            pos, theta = bricks[brick_index]
-            pool.spawn(brick_index, pos, theta)
+
+        if phase == 'SPAWN' and brick_index < len(bricks):
+            pool.spawn(brick_index, bricks[brick_index])
             brick_index += 1
             if brick_index >= len(bricks):
-                state = 'DESPAWN'
+                phase = 'DESPAWN'
                 brick_index = len(bricks) - 1
-        elif state == 'DESPAWN' and brick_index >= 0:
+        elif phase == 'DESPAWN' and brick_index >= 0:
             pool.despawn(brick_index)
             brick_index -= 1
 
             if brick_index < 0:
-                state = 'NONE'
+                phase = 'NONE'

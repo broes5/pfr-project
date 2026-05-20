@@ -2,6 +2,7 @@ import sys, os, math
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from shared.vector3 import Vector3
+from shared.brick_state import BrickState
 
 POOL_POSITION = Vector3(0, 0, -10)
 BRICK_HALF_HEIGHT = 0.075
@@ -41,12 +42,12 @@ class BrickPool:
             self._pool.append(holder.getMFNode(holder.getCount() - 1))
         print(f"Pre-spawned {count} bricks into pool (physics={physics}).")
 
-    def spawn(self, brick_id, position: Vector3, theta: float):
+    def spawn(self, brick_id, state: BrickState):
         if not self._pool:
             raise RuntimeError("Brick pool exhausted — call pre_spawn with a larger count")
         node = self._pool.pop()
-        rad = theta * math.pi / 180
-        node.getField("translation").setSFVec3f([position.x, position.y, position.z + BRICK_HALF_HEIGHT])
+        rad = state.rotationZ * math.pi / 180
+        node.getField("translation").setSFVec3f([state.position.x, state.position.y, state.position.z + BRICK_HALF_HEIGHT])
         node.getField("rotation").setSFRotation([0, 0, 1, rad])
         self._active[brick_id] = node
 
