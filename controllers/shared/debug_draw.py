@@ -1,4 +1,5 @@
 from .vector3 import Vector3
+from .color import Color
 from .path import Path
 
 
@@ -10,7 +11,7 @@ class DebugDraw:
     Usage:
         dbg = DebugDraw(supervisor)
         dbg.draw_path(path)
-        dbg.draw_wire_box(centre, size, colour=(1, 0, 0))
+        dbg.draw_wire_box(centre, size, Color.red)
         dbg.clear()
     """
 
@@ -28,17 +29,20 @@ class DebugDraw:
         while self._children.getCount() > 0:
             self._children.removeMF(0)
 
-    def draw_line(self, a: Vector3, b: Vector3, colour=(1, 0, 0)):
-        r, g, bl = colour
+    def draw_line(self, a: Vector3, b: Vector3, colour: Color = None):
+        if colour is None:
+            colour = Color.red
         self._children.importMFNodeFromString(-1, f'''Shape {{
-  appearance Appearance {{ material Material {{ emissiveColor {r} {g} {bl} }} }}
+  appearance Appearance {{ material Material {{ emissiveColor {colour.r} {colour.g} {colour.b} }} }}
   geometry IndexedLineSet {{
     coord Coordinate {{ point [ {a.x} {a.y} {a.z}  {b.x} {b.y} {b.z} ] }}
     coordIndex [ 0 1 -1 ]
   }}
 }}''')
 
-    def draw_wire_box(self, centre: Vector3, size: Vector3, colour=(1, 0, 0)):
+    def draw_wire_box(self, centre: Vector3, size: Vector3, colour: Color = None):
+        if colour is None:
+            colour = Color.red
         hx, hy, hz = size.x * 0.5, size.y * 0.5, size.z * 0.5
         cx, cy, cz = centre.x, centre.y, centre.z
         pts = [
@@ -48,9 +52,8 @@ class DebugDraw:
             (cx+hx, cy+hy, cz+hz), (cx-hx, cy+hy, cz+hz),
         ]
         pts_str = '  '.join(f'{x} {y} {z}' for x, y, z in pts)
-        r, g, bl = colour
         self._children.importMFNodeFromString(-1, f'''Shape {{
-  appearance Appearance {{ material Material {{ emissiveColor {r} {g} {bl} }} }}
+  appearance Appearance {{ material Material {{ emissiveColor {colour.r} {colour.g} {colour.b} }} }}
   geometry IndexedLineSet {{
     coord Coordinate {{ point [ {pts_str} ] }}
     coordIndex [ 0 1 -1  1 2 -1  2 3 -1  3 0 -1
@@ -59,6 +62,8 @@ class DebugDraw:
   }}
 }}''')
 
-    def draw_path(self, path: Path, colour=(0, 1, 0)):
+    def draw_path(self, path: Path, colour: Color = None):
+        if colour is None:
+            colour = Color.green
         for i in range(len(path) - 1):
             self.draw_line(path[i], path[i + 1], colour)

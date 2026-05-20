@@ -6,6 +6,7 @@ from controller import Supervisor
 from brick_parser import parse_brick_file, to_world_coords
 from brick_placer import BrickPool
 from shared.vector3 import Vector3
+from shared.color import Color
 from shared.debug_draw import DebugDraw
 
 BRICK_FILE = "instructions/uni1.txt"
@@ -38,7 +39,7 @@ state = 'SPAWN'
 
 while supervisor.step(timestep) != -1:
     dbg.clear()
-    dbg.draw_wire_box(boundsCenter, bounds, colour=(0, 0, 1))
+    dbg.draw_wire_box(boundsCenter, bounds, Color.blue)
 
     elapsed += timestep
     if elapsed >= SPAWN_INTERVAL:
