@@ -37,6 +37,7 @@ class BrickPool:
                 f'rotation 0 0 1 0 '
                 f'}}'
             )
+            print(holder.importMFNodeFromString(-1, node_str))
             holder.importMFNodeFromString(-1, node_str)
             self._pool.append(holder.getMFNode(holder.getCount() - 1))
         print(f"Pre-spawned {count} bricks into pool (physics={physics}).")

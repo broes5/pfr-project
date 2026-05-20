@@ -27,7 +27,7 @@ while supervisor.step(timestep) != -1:
     elapsed += timestep
     if elapsed >= SPAWN_INTERVAL:
         elapsed -= SPAWN_INTERVAL
-
+        
         if state == 'SPAWN' and brick_index < len(bricks):
             pos, theta = bricks[brick_index]
             pool.spawn(brick_index, pos, theta)

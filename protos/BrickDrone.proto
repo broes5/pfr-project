@@ -34,7 +34,6 @@ Robot {
       children IS bodySlot
     }
     Transform {
-      #translation -0.05 0 -0.01
       rotation 0 0 1 1.5708
       scale 0.1 0.1 0.1
       children [

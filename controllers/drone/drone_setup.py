@@ -1,7 +1,8 @@
 import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'shared'))
 import math
 from controller import Robot, Keyboard
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'shared'))
 from vector3 import Vector3
 
 def clamp(value, low, high):
