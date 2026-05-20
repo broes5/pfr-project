@@ -37,7 +37,7 @@ while robot.step(timestep) != -1:
         for i in range(N_DRONES):
             name = f"BrickDrone_{i}"
             tgt = DEBUG_TARGETS[i]
-            msg = f"{name} TARGET {tgt.x} {tgt.y} {tgt.z}"
+            msg = f"{name} TARGET {tgt.to_msg()}"
             emitter.send(msg.encode('utf-8'))
             print(f"[CTRL] Sent: {msg}")
         targets_sent = True

@@ -22,9 +22,7 @@ while robot.step(timestep) != -1:
             
             if len(parts) == 5 and parts[0] == drone_name and parts[1] == 'TARGET':
                 try:
-                    targetPos.x = float(parts[2])
-                    targetPos.y = float(parts[3])
-                    targetPos.z = float(parts[4])
+                    targetPos = Vector3.from_msg(' '.join(parts[2:5]))
                     print(f"[COMMS] New target received: X:{targetPos.x:.2f} Y:{targetPos.y:.2f} Z:{targetPos.z:.2f}")
                 except:
                     print(f"[COMMS] Error parsing coordinate data.")
@@ -39,7 +37,7 @@ while robot.step(timestep) != -1:
             receiver.nextPacket()
     # send drone's current status (current and target location) at twice the speed of the print counter
     if emitter and print_counter % 50 == 0:
-        status_msg = f"{drone_name} CURRENTPOS {currentPos.x:.2f} {currentPos.y:.2f} {currentPos.z:.2f} TARGETPOS {targetPos.x:.2f} {targetPos.y:.2f} {targetPos.z:.2f}"
+        status_msg = f"{drone_name} CURRENTPOS {currentPos.to_msg()} TARGETPOS {targetPos.to_msg()}"
         emitter.send(status_msg.encode('utf-8'))
     
     # 2. Filtered Velocity Calculation

@@ -29,6 +29,14 @@ class Vector3:
     def __repr__(self):
         return f"Vector3({self.x}, {self.y}, {self.z})"
 
+    def to_msg(self):
+        return f"{self.x} {self.y} {self.z}"
+
+    @classmethod
+    def from_msg(cls, s):
+        x, y, z = s.split()
+        return cls(float(x), float(y), float(z))
+
     @classmethod
     def from_list(cls, values):
         return cls(values[0], values[1], values[2])

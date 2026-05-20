@@ -33,8 +33,8 @@ while supervisor.step(timestep) != -1:
         if len(parts) == 9 and parts[1] == 'CURRENTPOS' and parts[5] == 'TARGETPOS':
             name = parts[0]
             try:
-                cur = Vector3(float(parts[2]), float(parts[3]), float(parts[4]))
-                tgt = Vector3(float(parts[6]), float(parts[7]), float(parts[8]))
+                cur = Vector3.from_msg(' '.join(parts[2:5]))
+                tgt = Vector3.from_msg(' '.join(parts[6:9]))
                 drone_states[name] = (cur, tgt)
             except ValueError:
                 pass
