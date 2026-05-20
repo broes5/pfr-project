@@ -55,6 +55,6 @@ Robot {
   }
   physics IS physics
   contactMaterial IS contactMaterial
-  controller "controller_main"
+  controller "controller_device"
 }
 }
