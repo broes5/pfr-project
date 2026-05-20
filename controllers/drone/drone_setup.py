@@ -149,13 +149,13 @@ while robot.step(timestep) != -1:
         print(f'Physics settled. Initial GPS: {prevPos.x:.2f}, {prevPos.y:.2f}\n\n')
         break
 
-print("──────────────────────────────────────────────")
-print("                 CONTROLS                     ")
-print("──────────────────────────────────────────────")
+#print("──────────────────────────────────────────────")
+#print("                 CONTROLS                     ")
+#print("──────────────────────────────────────────────")
 
-print("\nT = Takeoff")
+#print("\nT = Takeoff")
 
-print("──────────────   While Flying   ──────────────")
-print("L = Land")
-print("WASD = Move Target")
-print("Arrow keys = Change Target Altitude/Yaw")
+#print("──────────────   While Flying   ──────────────")
+#print("L = Land")
+#print("WASD = Move Target")
+#print("Arrow keys = Change Target Altitude/Yaw")
