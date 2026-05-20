@@ -1,8 +1,5 @@
-import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
-from shared.vector3 import Vector3
-from shared.brick_state import BrickState
+from .vector3 import Vector3
+from .brick_state import BrickState
 
 SCALE = 0.02
 Z_SCALE = 0.02

@@ -3,6 +3,12 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from controller import Robot
 from shared.vector3 import Vector3
+from shared.brick_parser import parse_brick_file, to_world_coords
+
+BRICK_FILE = "../instructions/uni1.txt"
+
+brick_states = to_world_coords(parse_brick_file(BRICK_FILE))
+print(f"[CTRL] Loaded {len(brick_states)} brick states")
 
 N_DRONES = 5
 DEBUG_TARGETS = [

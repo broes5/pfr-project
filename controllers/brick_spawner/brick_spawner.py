@@ -1,15 +1,15 @@
 import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'shared'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from controller import Supervisor
 
-from brick_parser import parse_brick_file, to_world_coords
+from shared.brick_parser import parse_brick_file, to_world_coords
 from brick_placer import BrickPool
 from shared.vector3 import Vector3
 from shared.color import Color
 from shared.debug_draw import DebugDraw
 
-BRICK_FILE = "instructions/uni1.txt"
+BRICK_FILE = "../instructions/uni1.txt"
 
 supervisor = Supervisor()
 timestep = int(supervisor.getBasicTimeStep())
