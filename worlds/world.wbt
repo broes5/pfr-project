@@ -34,8 +34,13 @@ TexturedBackgroundLight {
 }
 Robot {
   name "Brick Manager"
-  controller "brick_spawner"
+  controller "brick_manager"
   supervisor TRUE
+  children [
+    Receiver {
+      channel -1
+    }
+  ]
 }
 Robot {
   name "Drone Spawner"

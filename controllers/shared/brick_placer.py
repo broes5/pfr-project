@@ -66,6 +66,28 @@ class BrickPool:
     def get(self, brick_id):
         return self._active.get(brick_id)
 
+    def get_state(self, brick_id) -> BrickState | None:
+        node = self._active.get(brick_id)
+        if node is None:
+            return None
+        t = node.getField("translation").getSFVec3f()
+        r = node.getField("rotation").getSFRotation()
+        return BrickState(
+            Vector3(t[0], t[1], t[2] - BRICK_HALF_HEIGHT),
+            math.degrees(r[3])
+        )
+
+    def set_state(self, brick_id, state: BrickState):
+        node = self._active.get(brick_id)
+        if node is None:
+            return
+        rad = state.rotationZ * math.pi / 180
+        node.getField("translation").setSFVec3f([
+            state.position.x, state.position.y,
+            state.position.z + BRICK_HALF_HEIGHT
+        ])
+        node.getField("rotation").setSFRotation([0, 0, 1, rad])
+
     @staticmethod
     def brick_name(brick_id: int) -> str:
         return f"brick_{brick_id:03d}"

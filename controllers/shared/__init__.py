@@ -8,3 +8,4 @@ from .voxel_world import VoxelWorld
 from .pathfinder import find_path
 from .brick_state import BrickState
 from .brick_parser import parse_brick_file, to_world_coords
+from .brick_placer import BrickPool

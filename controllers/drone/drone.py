@@ -49,6 +49,23 @@ while robot.step(timestep) != -1:
                     targetYaw = yaw
                     state = TAKEOFF
                     print(f'>> [COMMS] TAKEOFF command received')
+            elif len(parts) == 6 and parts[0] == drone_name and parts[1] == 'TASK' and parts[2] == 'PICKUP':
+                try:
+                    brick_id = int(parts[3])
+                    px, py = float(parts[4]), float(parts[5])
+                    task_queue.append(('PICKUP', brick_id, Vector3(px, py, PICKUP_ALT)))
+                    print(f'[TASK] Queued PICKUP brick {brick_id} → descend to ({px:.2f},{py:.2f},{PICKUP_ALT}m)')
+                except (ValueError, IndexError):
+                    print(f'[TASK] Malformed TASK PICKUP: {packet}')
+            elif len(parts) == 8 and parts[0] == drone_name and parts[1] == 'TASK' and parts[2] == 'PLACE':
+                try:
+                    brick_id = int(parts[3])
+                    tx, ty, tz, rot = float(parts[4]), float(parts[5]), float(parts[6]), float(parts[7])
+                    place_fly_z = max(tz + PLACE_ALT_OFFSET, PICKUP_ALT)
+                    task_queue.append(('PLACE', brick_id, Vector3(tx, ty, place_fly_z), tx, ty, tz, rot))
+                    print(f'[TASK] Queued PLACE brick {brick_id} → descend to z={place_fly_z:.2f}m, place at z={tz:.3f}')
+                except (ValueError, IndexError):
+                    print(f'[TASK] Malformed TASK PLACE: {packet}')
             receiver.nextPacket()
     # send drone's current status (current and target location) at twice the speed of the print counter
     if emitter and print_counter % 50 == 0:
@@ -138,13 +155,39 @@ while robot.step(timestep) != -1:
             #print(f'[PATH] idx={path_index}/{len(current_path)-1} | dist_3d={dist_3d:.3f} | threshold={WAYPOINT_THRESHOLD}')
             #print(f'[PATH] pos=({currentPos.x:.2f},{currentPos.y:.2f},{currentPos.z:.2f}) | wp=({wp.x:.2f},{wp.y:.2f},{wp.z:.2f})')
         if dist_3d < WAYPOINT_THRESHOLD:
-            #print(f'[PATH] Waypoint {path_index} reached (dist_xy={dist_3d:.3f}). Advancing.')
             path_index += 1
             if path_index < len(current_path):
                 targetPos = current_path[path_index]
-                print(f'[{drone_name}] [PATH] New target: waypoint {path_index} = ({targetPos.x:.2f},{targetPos.y:.2f},{targetPos.z:.2f})')
-            #else:
-                #print(f'[PATH] All {len(current_path)} waypoints complete. Hovering at destination.')
+                print(f'[{drone_name}] [PATH] Waypoint {path_index} = ({targetPos.x:.2f},{targetPos.y:.2f},{targetPos.z:.2f})')
+            else:
+                # Path complete — activate the queued task (descent + signal)
+                current_path = None
+                if task_queue and current_task is None:
+                    current_task = task_queue.pop(0)
+                    dest = current_task[2]
+                    targetPos = Vector3(dest.x, dest.y, dest.z)
+                    print(f'[TASK] Path done, activating {current_task[0]} brick {current_task[1]} → descend to ({targetPos.x:.2f},{targetPos.y:.2f},{targetPos.z:.2f})')
+
+    # Fallback: activate task if there is no path in progress (e.g. controller skipped sending one)
+    if state == FLY and current_task is None and current_path is None and task_queue:
+        current_task = task_queue.pop(0)
+        dest = current_task[2]
+        targetPos = Vector3(dest.x, dest.y, dest.z)
+        print(f'[TASK] Activating {current_task[0]} brick {current_task[1]} (no-path fallback)')
+
+    # Emit PICKUP / PLACE signal when task descent position is reached
+    if state == FLY and current_task is not None:
+        if Vector3.distance(currentPos, current_task[2]) < TASK_ARRIVAL_THRESHOLD:
+            verb = current_task[0]
+            brick_id = current_task[1]
+            if verb == 'PICKUP':
+                emitter.send(f"{drone_name} PICKUP {brick_id}".encode('utf-8'))
+                print(f'[TASK] Emitted PICKUP brick {brick_id}')
+            elif verb == 'PLACE':
+                _, _, _, tx, ty, tz, rot = current_task
+                emitter.send(f"{drone_name} PLACE {brick_id} {tx:.4f} {ty:.4f} {tz:.4f} {rot:.4f}".encode('utf-8'))
+                print(f'[TASK] Emitted PLACE brick {brick_id} at ({tx:.2f},{ty:.2f},{tz:.2f})')
+            current_task = None
 
     # 5. Position Controller (World to Body)
     cosY, sinY = math.cos(yaw), math.sin(yaw)

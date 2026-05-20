@@ -23,6 +23,7 @@ PROTO BrickDrone [
   field SFBool     supervisor          FALSE                               # Is `Robot.supervisor`.
   field SFBool     synchronization     TRUE                                # Is `Robot.synchronization`.
   field MFFloat    battery             []                                  # Is `Robot.battery`.
+  field MFNode     brickSlot           []                                  # Visual-only children parented to the drone's carry slot.
 ]
 {
 Robot {
@@ -574,6 +575,10 @@ Robot {
         }
         physics Physics {}
       }
+    }
+    DEF BRICK_SLOT Pose {
+      translation 0 0 -0.1
+      children IS brickSlot
     }
   ]
   name IS name

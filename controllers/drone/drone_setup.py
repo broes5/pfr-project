@@ -35,6 +35,16 @@ current_path: Path = None
 path_index: int = 0
 WAYPOINT_THRESHOLD = 0.5
 
+# Task queue state (TASK PICKUP / TASK PLACE assignments from controller_device)
+# Each task: ('PICKUP', brick_id, flight_target: Vector3)
+#         or ('PLACE',  brick_id, flight_target: Vector3, place_x, place_y, place_z, place_rot)
+task_queue = []
+current_task = None
+TASK_ARRIVAL_THRESHOLD = 0.3  # m — how close to the task position before emitting the signal
+TASK_ALT = 3.0                # cruise altitude (m) used when transiting between pile and target
+PICKUP_ALT = 0.5              # altitude (m) to descend to over the pile before emitting PICKUP
+PLACE_ALT_OFFSET = 0.5        # m above the brick's target z to descend to before emitting PLACE
+
 # ── Motors
 fl = robot.getDevice('front left propeller')
 fr = robot.getDevice('front right propeller')
