@@ -1,6 +1,6 @@
 from controller import Supervisor
 
-N_DRONES = 5
+N_DRONES = 3
 SPACING = 1.2
 START_X = -3.0
 START_Z = 0.065

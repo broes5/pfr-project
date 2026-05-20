@@ -26,6 +26,8 @@ Robot {
   children [
     Emitter {
     }
+    Receiver {
+    }
     Transform {
       scale IS size
       children [

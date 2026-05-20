@@ -26,6 +26,21 @@ while robot.step(timestep) != -1:
                     print(f"[COMMS] New target received: X:{targetPos.x:.2f} Y:{targetPos.y:.2f} Z:{targetPos.z:.2f}")
                 except:
                     print(f"[COMMS] Error parsing coordinate data.")
+            elif len(parts) >= 3 and parts[0] == drone_name and parts[1] == 'PATH':
+                try:
+                    waypoints = [Vector3(*map(float, wp.split(','))) for wp in parts[2:]]
+                    current_path = Path(waypoints)
+                    path_index = 0
+                    # Only chase the first waypoint immediately if already flying.
+                    # If still in TAKEOFF, leave targetPos alone so the drone reaches
+                    # TAKEOFF_ALT first — the TAKEOFF completion block sets targetPos.
+                    if len(current_path) > 0 and state == FLY:
+                        targetPos = current_path[0]
+                    print(f"[COMMS] Path received ({state}): {len(current_path)} waypoints")
+                    for i, wp in enumerate(current_path):
+                        print(f"  wp[{i}] = ({wp.x:.2f}, {wp.y:.2f}, {wp.z:.2f})")
+                except Exception as e:
+                    print(f"[COMMS] Error parsing PATH: {e}")
             elif len(parts) == 2 and parts[0] == drone_name and parts[1] == 'TAKEOFF':
                 if state == IDLE:
                     targetPos.x = currentPos.x
@@ -101,16 +116,36 @@ while robot.step(timestep) != -1:
     # 4. State Management & Periodic Debug Printing
     print_counter += 1
     if state == TAKEOFF and abs(currentPos.z - TAKEOFF_ALT) < ALT_REACHED:
-        targetPos.x = currentPos.x
-        targetPos.y = currentPos.y
         state = FLY
-        print(f'>> TAKEOFF COMPLETE. Holding position at X:{targetPos.x:.2f}, Y:{targetPos.y:.2f}. Switching to fly state')
+        if current_path is not None and path_index < len(current_path):
+            targetPos = current_path[path_index]
+            print(f'>> TAKEOFF COMPLETE. Resuming path at waypoint {path_index}: ({targetPos.x:.2f},{targetPos.y:.2f},{targetPos.z:.2f})')
+        else:
+            targetPos.x = currentPos.x
+            targetPos.y = currentPos.y
+            print(f'>> TAKEOFF COMPLETE. Holding position at X:{targetPos.x:.2f}, Y:{targetPos.y:.2f}. Switching to fly state')
     
     if state == FLY and print_counter % 100 == 0:
         # Periodic status update
         actual_yaw_deg = math.degrees(yaw) % 360.0
         print(f'Target: (X: {targetPos.x:.2f}, Y: {targetPos.y:.2f}) | Yaw: {targetYaw:.2f}° | Altitude: {targetPos.z:.2f})\nActual: (X: {currentPos.x:.2f}, Y: {currentPos.y:.2f}) | Yaw: {targetYaw:.2f}° | Altitude: {currentPos.z:.2f}')
-            
+
+    # Advance through path waypoints when the current one is reached.
+    if state == FLY and current_path is not None and path_index < len(current_path):
+        wp = current_path[path_index]
+        dist_3d = Vector3.distance(currentPos, wp)
+        #if print_counter % 100 == 0:
+            #print(f'[PATH] idx={path_index}/{len(current_path)-1} | dist_3d={dist_3d:.3f} | threshold={WAYPOINT_THRESHOLD}')
+            #print(f'[PATH] pos=({currentPos.x:.2f},{currentPos.y:.2f},{currentPos.z:.2f}) | wp=({wp.x:.2f},{wp.y:.2f},{wp.z:.2f})')
+        if dist_3d < WAYPOINT_THRESHOLD:
+            #print(f'[PATH] Waypoint {path_index} reached (dist_xy={dist_3d:.3f}). Advancing.')
+            path_index += 1
+            if path_index < len(current_path):
+                targetPos = current_path[path_index]
+                print(f'[{drone_name}] [PATH] New target: waypoint {path_index} = ({targetPos.x:.2f},{targetPos.y:.2f},{targetPos.z:.2f})')
+            #else:
+                #print(f'[PATH] All {len(current_path)} waypoints complete. Hovering at destination.')
+
     # 5. Position Controller (World to Body)
     cosY, sinY = math.cos(yaw), math.sin(yaw)
     ex = (targetPos.x - currentPos.x)

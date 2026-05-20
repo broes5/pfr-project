@@ -40,6 +40,14 @@ class VoxelWorld:
         if self.in_bounds(vox):
             self._grid[vox.x, vox.y, vox.z] = False
 
+    def mark_path_occupied(self, path):
+        for wp in path:
+            self.mark_occupied(wp)
+
+    def mark_path_free(self, path):
+        for wp in path:
+            self.mark_free(wp)
+
     def is_occupied(self, pos: Vector3) -> bool:
         return self.is_voxel_occupied(self.world_to_voxel(pos))
 

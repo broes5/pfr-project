@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from controller import Supervisor
 from shared.debug_draw import DebugDraw
 from shared.vector3 import Vector3
+from shared.path import Path
 from shared.color import Color
 
 DRONE_COLORS = [
@@ -29,7 +30,7 @@ while supervisor.step(timestep) != -1:
     while receiver.getQueueLength() > 0:
         packet = receiver.getString()
         parts = packet.split()
-        # Format: "BrickDrone_N CURRENTPOS x y z TARGETPOS x y z"
+        # Status report: "BrickDrone_N CURRENTPOS x y z TARGETPOS x y z"
         if len(parts) == 9 and parts[1] == 'CURRENTPOS' and parts[5] == 'TARGETPOS':
             name = parts[0]
             try:
@@ -42,5 +43,6 @@ while supervisor.step(timestep) != -1:
 
     dbg.clear()
     for i, name in enumerate(sorted(drone_states)):
+        color = DRONE_COLORS[i % len(DRONE_COLORS)]
         cur, tgt = drone_states[name]
-        dbg.draw_line(cur, tgt, DRONE_COLORS[i % len(DRONE_COLORS)])
+        dbg.draw_line(cur, tgt, color)

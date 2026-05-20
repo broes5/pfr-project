@@ -12,5 +12,6 @@ timestep = int(supervisor.getBasicTimeStep())
 dbg = DebugDraw(supervisor, '__DEBUG_TEST__')
 
 while supervisor.step(timestep) != -1:
+    continue
     dbg.clear()
     dbg.draw_wire_box(Vector3(1, 2, 0.5), Vector3(0.5, 0.5, 0.5), Color.red)

@@ -38,8 +38,8 @@ elapsed = 0
 phase = 'SPAWN'
 
 while supervisor.step(timestep) != -1:
-    dbg.clear()
-    dbg.draw_wire_box(boundsCenter, bounds, Color.blue)
+    #dbg.clear()
+    #dbg.draw_wire_box(boundsCenter, bounds, Color.blue)
 
     elapsed += timestep
     if elapsed >= SPAWN_INTERVAL:

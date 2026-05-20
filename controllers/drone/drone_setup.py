@@ -5,6 +5,7 @@ from controller import Robot, Keyboard
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from shared.vector3 import Vector3
+from shared.path import Path
 
 def clamp(value, low, high):
     return max(low, min(value, high))
@@ -28,6 +29,11 @@ targetPos = Vector3(0, 0, 0)
 
 # target rotation in degrees
 targetYaw = 0.0
+
+# Path following state
+current_path: Path = None
+path_index: int = 0
+WAYPOINT_THRESHOLD = 0.5
 
 # ── Motors
 fl = robot.getDevice('front left propeller')
