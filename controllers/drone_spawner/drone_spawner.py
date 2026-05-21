@@ -1,25 +1,24 @@
-from controller import Supervisor
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-N_DRONES = 3
-SPACING = 1.5
-START_X = 2
-START_Z = 0.065
+from controller import Supervisor
+from shared.config import N_DRONES, DRONE_SPACING, DRONE_START_X, DRONE_START_Z
 
 supervisor    = Supervisor()
 timestep      = int(supervisor.getBasicTimeStep())
 root_children = supervisor.getRoot().getField("children")
 
 for i in range(N_DRONES):
-    x = (i - (N_DRONES - 1) / 2.0) * SPACING
+    y = (i - (N_DRONES - 1) / 2.0) * DRONE_SPACING
     node_str = (
         f'BrickDrone {{ '
-        f'translation {START_X:.4f} {x:.4f} {START_Z:.4f} '
+        f'translation {DRONE_START_X:.4f} {y:.4f} {DRONE_START_Z:.4f} '
         f'name "BrickDrone_{i}" '
         f'}}'
     )
     root_children.importMFNodeFromString(-1, node_str)
 
-print(f"[drone_spawner] Spawned {N_DRONES} BrickDrones in a line (spacing={SPACING}m).")
+print(f"[drone_spawner] Spawned {N_DRONES} BrickDrones in a line (spacing={DRONE_SPACING}m).")
 
 while supervisor.step(timestep) != -1:
     pass

@@ -6,10 +6,9 @@ from shared.vector3 import Vector3
 from shared.brick_state import BrickState
 from shared.brick_parser import parse_brick_file, to_world_coords
 from shared.brick_placer import BrickPool
-from shared.pile_layout import pile_pos_for_brick, PILE_POSITION
+from shared.pile_layout import configure, pile_pos_for_brick, PILE_POSITION
+from shared.config import N_DRONES, BRICK_FILE
 
-BRICK_FILE = "../instructions/uni1.txt"
-N_DRONES = 3
 DRONE_SLOT_INIT_DELAY_MS = 1000
 
 supervisor = Supervisor()
@@ -20,6 +19,7 @@ receiver.enable(timestep)
 
 raw_bricks = parse_brick_file(BRICK_FILE)
 brick_targets = to_world_coords(raw_bricks)
+configure(len(brick_targets))
 
 pool = BrickPool(supervisor)
 pool.pre_spawn(len(brick_targets), physics=False)

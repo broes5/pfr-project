@@ -8,23 +8,21 @@ from shared.voxel_world import VoxelWorld
 from shared.pathfinder import find_path
 from shared.brick_parser import parse_brick_file, to_world_coords
 from shared.pile_layout import (
-    pile_pos_for_brick, pile_layer_for_brick, pile_layer_size,
-    PILE_LAYERS, PICKUP_HOVER_OFFSET, PILE_POSITION,
+    configure, pile_pos_for_brick, pile_layer_for_brick,
+    pile_layer_size, pile_layers_for_count,
+    PICKUP_HOVER_OFFSET, PILE_POSITION,
 )
-
-BRICK_FILE = "../instructions/uni1.txt"
-TASK_ALT         = 3.0   # cruise altitude; must match drone's TASK_ALT
-TAKEOFF_ALT      = 3.0   # used to infer when drones are airborne from CURRENTPOS
-PICKUP_ALT       = 0.2   # must match drone_setup.py PICKUP_ALT
-PLACE_ALT_OFFSET = 0.2   # must match drone_setup.py PLACE_ALT_OFFSET
-
-N_DRONES = 3
+from shared.config import (
+    N_DRONES, BRICK_FILE,
+    TASK_ALT, TAKEOFF_ALT, PICKUP_ALT, PLACE_ALT_OFFSET,
+)
 
 WORLD_ORIGIN = Vector3(-8.0, -8.0, 0.0)
 WORLD_SIZE   = Vector3(16.0, 16.0, 8.0)
 VOXEL_SIZE   = 0.5
 
 brick_targets = to_world_coords(parse_brick_file(BRICK_FILE))
+configure(len(brick_targets))
 print(f"[CTRL] Loaded {len(brick_targets)} brick targets")
 
 robot = Robot()
@@ -36,8 +34,9 @@ receiver.enable(timestep)
 voxel_world = VoxelWorld(WORLD_ORIGIN, WORLD_SIZE, VOXEL_SIZE)
 
 # ── Layer gate: tracks how many bricks per layer have been picked up
-_layer_size  = pile_layer_size()
-pile_layer_taken = [0] * PILE_LAYERS   # confirmed pickups per layer
+_layer_size      = pile_layer_size()
+_n_layers        = pile_layers_for_count(len(brick_targets))
+pile_layer_taken = [0] * _n_layers
 
 # Brick lifecycle tracking
 unplaced  = deque(range(len(brick_targets)))  # brick_ids not yet placed
@@ -108,6 +107,8 @@ def _next_assignable_brick():
         return None
     brick_id = unplaced[0]
     li = pile_layer_for_brick(brick_id)
+    if li >= _n_layers:
+        return brick_id   # brick beyond computed layers — no gate to check
     for l in range(li):
         if pile_layer_taken[l] < _layer_size:
             return None   # upper layer still has bricks to pick up
@@ -229,10 +230,11 @@ while robot.step(timestep) != -1:
                 brick_id = int(parts[2])
                 if name in pile_in_progress:
                     li = pile_in_progress.pop(name)
-                    pile_layer_taken[li] += 1
-                    done = pile_layer_taken[li] == _layer_size
-                    print(f"[CTRL] Pile layer {li}: {pile_layer_taken[li]}/{_layer_size} picked up"
-                          + (" — layer complete" if done else ""))
+                    if li < _n_layers:
+                        pile_layer_taken[li] += 1
+                        done = pile_layer_taken[li] == _layer_size
+                        print(f"[CTRL] Pile layer {li}: {pile_layer_taken[li]}/{_layer_size} picked up"
+                              + (" — layer complete" if done else ""))
                 send_place_leg(name, brick_id)
             except ValueError:
                 pass

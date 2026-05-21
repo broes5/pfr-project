@@ -27,6 +27,7 @@ dbg = DebugDraw(supervisor, '__DRONE_TRACKER__')
 drone_states = {}  # {name: (Vector3 current, Vector3 target)}
 
 while supervisor.step(timestep) != -1:
+    continue
     while receiver.getQueueLength() > 0:
         packet = receiver.getString()
         parts = packet.split()
