@@ -25,13 +25,35 @@ def _h(a: Vector3Int, b: Vector3Int) -> float:
     return math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2 + (a.z - b.z) ** 2)
 
 
-def find_path(world: VoxelWorld, start: Vector3, goal: Vector3):
-    """Return a Path of world-space waypoints from start to goal, or None if unreachable."""
+def find_path(world: VoxelWorld, start: Vector3, goal: Vector3, goal_tolerance: int = 2):
+    """Return a Path of world-space waypoints from start to goal, or None if unreachable.
+
+    If the exact goal voxel is occupied, searches nearby voxels in XY (same Z) within
+    goal_tolerance voxels and uses the nearest free one. This lets drones reach positions
+    that are slightly blocked without failing entirely.
+    """
     sv = world.world_to_voxel(start)
     gv = world.world_to_voxel(goal)
 
-    if world.is_voxel_occupied(sv) or world.is_voxel_occupied(gv):
+    if world.is_voxel_occupied(sv):
         return None
+
+    if world.is_voxel_occupied(gv):
+        if goal_tolerance <= 0:
+            return None
+        best_gv = None
+        best_d2 = float('inf')
+        for dx in range(-goal_tolerance, goal_tolerance + 1):
+            for dy in range(-goal_tolerance, goal_tolerance + 1):
+                candidate = Vector3Int(gv.x + dx, gv.y + dy, gv.z)
+                if not world.is_voxel_occupied(candidate):
+                    d2 = dx * dx + dy * dy
+                    if d2 < best_d2:
+                        best_d2 = d2
+                        best_gv = candidate
+        if best_gv is None:
+            return None
+        gv = best_gv
 
     if sv == gv:
         return Path([world.voxel_to_world(sv)])

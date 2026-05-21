@@ -28,17 +28,27 @@ while robot.step(timestep) != -1:
                     print(f"[COMMS] Error parsing coordinate data.")
             elif len(parts) >= 3 and parts[0] == drone_name and parts[1] == 'PATH':
                 try:
-                    waypoints = [Vector3(*map(float, wp.split(','))) for wp in parts[2:]]
-                    current_path = Path(waypoints)
-                    path_index = 0
-                    # Only chase the first waypoint immediately if already flying.
-                    # If still in TAKEOFF, leave targetPos alone so the drone reaches
-                    # TAKEOFF_ALT first — the TAKEOFF completion block sets targetPos.
-                    if len(current_path) > 0 and state == FLY:
-                        targetPos = current_path[0]
-                    print(f"[COMMS] Path received ({state}): {len(current_path)} waypoints")
-                    for i, wp in enumerate(current_path):
-                        print(f"  wp[{i}] = ({wp.x:.2f}, {wp.y:.2f}, {wp.z:.2f})")
+                    wps_start = 2
+                    yaw_override = None
+                    if parts[2].startswith('YAW:'):
+                        yaw_override = float(parts[2][4:])
+                        wps_start = 3
+                    waypoints = [Vector3(*map(float, wp.split(','))) for wp in parts[wps_start:]]
+                    new_path = Path(waypoints)
+                    if current_path is None and not path_queue:
+                        current_path = new_path
+                        path_index = 0
+                        if yaw_override is not None:
+                            targetYaw = yaw_override
+                        # Only chase the first waypoint immediately if already flying.
+                        # If still in TAKEOFF, leave targetPos alone so the drone reaches
+                        # TAKEOFF_ALT first — the TAKEOFF completion block sets targetPos.
+                        if len(current_path) > 0 and state == FLY:
+                            targetPos = current_path[0]
+                        print(f"[COMMS] Path started ({state}): {len(current_path)} waypoints")
+                    else:
+                        path_queue.append((new_path, yaw_override))
+                        print(f"[COMMS] Path queued: {len(new_path)} waypoints (queue depth={len(path_queue)})")
                 except Exception as e:
                     print(f"[COMMS] Error parsing PATH: {e}")
             elif len(parts) == 2 and parts[0] == drone_name and parts[1] == 'TAKEOFF':
@@ -49,12 +59,13 @@ while robot.step(timestep) != -1:
                     targetYaw = yaw
                     state = TAKEOFF
                     print(f'>> [COMMS] TAKEOFF command received')
-            elif len(parts) == 6 and parts[0] == drone_name and parts[1] == 'TASK' and parts[2] == 'PICKUP':
+            elif len(parts) == 8 and parts[0] == drone_name and parts[1] == 'TASK' and parts[2] == 'PICKUP':
                 try:
                     brick_id = int(parts[3])
-                    px, py = float(parts[4]), float(parts[5])
-                    task_queue.append(('PICKUP', brick_id, Vector3(px, py, PICKUP_ALT)))
-                    print(f'[TASK] Queued PICKUP brick {brick_id} → descend to ({px:.2f},{py:.2f},{PICKUP_ALT}m)')
+                    px, py, pz = float(parts[4]), float(parts[5]), float(parts[6])
+                    pickup_yaw = float(parts[7])
+                    task_queue.append(('PICKUP', brick_id, Vector3(px, py, pz), pickup_yaw))
+                    print(f'[TASK] Queued PICKUP brick {brick_id} → ({px:.2f},{py:.2f},{pz:.2f}m) yaw={pickup_yaw:.1f}°')
                 except (ValueError, IndexError):
                     print(f'[TASK] Malformed TASK PICKUP: {packet}')
             elif len(parts) == 8 and parts[0] == drone_name and parts[1] == 'TASK' and parts[2] == 'PLACE':
@@ -63,7 +74,7 @@ while robot.step(timestep) != -1:
                     tx, ty, tz, rot = float(parts[4]), float(parts[5]), float(parts[6]), float(parts[7])
                     place_fly_z = max(tz + PLACE_ALT_OFFSET, PICKUP_ALT)
                     task_queue.append(('PLACE', brick_id, Vector3(tx, ty, place_fly_z), tx, ty, tz, rot))
-                    print(f'[TASK] Queued PLACE brick {brick_id} → descend to z={place_fly_z:.2f}m, place at z={tz:.3f}')
+                    print(f'[TASK] Queued PLACE brick {brick_id} → fly to z={place_fly_z:.2f}m, place at z={tz:.3f}')
                 except (ValueError, IndexError):
                     print(f'[TASK] Malformed TASK PLACE: {packet}')
             receiver.nextPacket()
@@ -160,20 +171,48 @@ while robot.step(timestep) != -1:
                 targetPos = current_path[path_index]
                 print(f'[{drone_name}] [PATH] Waypoint {path_index} = ({targetPos.x:.2f},{targetPos.y:.2f},{targetPos.z:.2f})')
             else:
-                # Path complete — activate the queued task (descent + signal)
+                # Path complete — start next queued path, or activate task
                 current_path = None
-                if task_queue and current_task is None:
+                if path_queue:
+                    next_path, next_yaw = path_queue.pop(0)
+                    current_path = next_path
+                    path_index = 0
+                    if next_yaw is not None:
+                        targetYaw = next_yaw
+                    if len(current_path) > 0:
+                        targetPos = current_path[0]
+                    yaw_info = f' yaw→{next_yaw:.1f}°' if next_yaw is not None else ''
+                    print(f'[PATH] Next leg: {len(current_path)} waypoints{yaw_info}')
+                elif task_queue and current_task is None:
                     current_task = task_queue.pop(0)
                     dest = current_task[2]
+                    if current_task[0] == 'PICKUP':
+                        targetYaw = current_task[3]
+                    elif current_task[0] == 'PLACE':
+                        targetYaw = current_task[6]
                     targetPos = Vector3(dest.x, dest.y, dest.z)
-                    print(f'[TASK] Path done, activating {current_task[0]} brick {current_task[1]} → descend to ({targetPos.x:.2f},{targetPos.y:.2f},{targetPos.z:.2f})')
+                    print(f'[TASK] All paths done, activating {current_task[0]} brick {current_task[1]} → ({targetPos.x:.2f},{targetPos.y:.2f},{targetPos.z:.2f})')
 
-    # Fallback: activate task if there is no path in progress (e.g. controller skipped sending one)
-    if state == FLY and current_task is None and current_path is None and task_queue:
-        current_task = task_queue.pop(0)
-        dest = current_task[2]
-        targetPos = Vector3(dest.x, dest.y, dest.z)
-        print(f'[TASK] Activating {current_task[0]} brick {current_task[1]} (no-path fallback)')
+    # Fallback: if idle with no current path, advance the queue
+    if state == FLY and current_task is None and current_path is None:
+        if path_queue:
+            next_path, next_yaw = path_queue.pop(0)
+            current_path = next_path
+            path_index = 0
+            if next_yaw is not None:
+                targetYaw = next_yaw
+            if len(current_path) > 0:
+                targetPos = current_path[0]
+            print(f'[PATH] Fallback: starting queued path, {len(current_path)} waypoints')
+        elif task_queue:
+            current_task = task_queue.pop(0)
+            dest = current_task[2]
+            if current_task[0] == 'PICKUP':
+                targetYaw = current_task[3]
+            elif current_task[0] == 'PLACE':
+                targetYaw = current_task[6]
+            targetPos = Vector3(dest.x, dest.y, dest.z)
+            print(f'[TASK] Activating {current_task[0]} brick {current_task[1]} → ({dest.x:.2f},{dest.y:.2f},{dest.z:.2f}) (fallback)')
 
     # Emit PICKUP / PLACE signal when task descent position is reached
     if state == FLY and current_task is not None:
@@ -217,7 +256,7 @@ while robot.step(timestep) != -1:
         raw_scale_y = 1.0
         
         # Obstacle avoidance
-        if state == FLY:
+        if state == FLY and OBSTACLE_AVOIDANCE:
             local_avoid_x = 0.0
             local_avoid_y = 0.0
         

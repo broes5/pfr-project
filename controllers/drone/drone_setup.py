@@ -33,6 +33,7 @@ targetYaw = 0.0
 # Path following state
 current_path: Path = None
 path_index: int = 0
+path_queue = []   # buffered (Path, yaw_degrees | None) pairs waiting to execute
 WAYPOINT_THRESHOLD = 0.5
 
 # Task queue state (TASK PICKUP / TASK PLACE assignments from controller_device)
@@ -42,8 +43,9 @@ task_queue = []
 current_task = None
 TASK_ARRIVAL_THRESHOLD = 0.3  # m — how close to the task position before emitting the signal
 TASK_ALT = 3.0                # cruise altitude (m) used when transiting between pile and target
-PICKUP_ALT = 0.5              # altitude (m) to descend to over the pile before emitting PICKUP
-PLACE_ALT_OFFSET = 0.5        # m above the brick's target z to descend to before emitting PLACE
+PICKUP_ALT = 0.2              # altitude (m) to descend to over the pile before emitting PICKUP
+PLACE_ALT_OFFSET = 0.2        # m above the brick's target z to descend to before emitting PLACE
+OBSTACLE_AVOIDANCE = False    # set False to disable sensor-based obstacle avoidance
 
 # ── Motors
 fl = robot.getDevice('front left propeller')

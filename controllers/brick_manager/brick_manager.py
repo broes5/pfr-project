@@ -6,9 +6,9 @@ from shared.vector3 import Vector3
 from shared.brick_state import BrickState
 from shared.brick_parser import parse_brick_file, to_world_coords
 from shared.brick_placer import BrickPool
+from shared.pile_layout import pile_pos_for_brick, PILE_POSITION
 
 BRICK_FILE = "../instructions/uni1.txt"
-PILE_POSITION = Vector3(-4.0, 0.0, 0.0)
 N_DRONES = 3
 DRONE_SLOT_INIT_DELAY_MS = 1000
 
@@ -25,9 +25,10 @@ pool = BrickPool(supervisor)
 pool.pre_spawn(len(brick_targets), physics=False)
 
 for brick_id in range(len(brick_targets)):
-    pool.spawn(brick_id, BrickState(PILE_POSITION, 0.0))
+    pos = pile_pos_for_brick(brick_id) or PILE_POSITION
+    pool.spawn(brick_id, BrickState(pos, 0.0))
 
-print(f"[BrickManager] Spawned {len(brick_targets)} bricks at pile {PILE_POSITION.x:.1f},{PILE_POSITION.y:.1f}")
+print(f"[BrickManager] Spawned {len(brick_targets)} bricks in pile grid around {PILE_POSITION.x:.1f},{PILE_POSITION.y:.1f}")
 
 
 def _find_drone_node(drone_name):

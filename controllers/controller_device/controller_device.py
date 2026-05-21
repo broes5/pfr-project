@@ -7,11 +7,16 @@ from shared.vector3 import Vector3
 from shared.voxel_world import VoxelWorld
 from shared.pathfinder import find_path
 from shared.brick_parser import parse_brick_file, to_world_coords
+from shared.pile_layout import (
+    pile_pos_for_brick, pile_layer_for_brick, pile_layer_size,
+    PILE_LAYERS, PICKUP_HOVER_OFFSET, PILE_POSITION,
+)
 
 BRICK_FILE = "../instructions/uni1.txt"
-PILE_POSITION = Vector3(-4.0, 0.0, 0.0)
-TASK_ALT = 3.0      # cruise altitude; must match drone's TASK_ALT
-TAKEOFF_ALT = 3.0   # used to infer when drones are airborne from CURRENTPOS
+TASK_ALT         = 3.0   # cruise altitude; must match drone's TASK_ALT
+TAKEOFF_ALT      = 3.0   # used to infer when drones are airborne from CURRENTPOS
+PICKUP_ALT       = 0.2   # must match drone_setup.py PICKUP_ALT
+PLACE_ALT_OFFSET = 0.2   # must match drone_setup.py PLACE_ALT_OFFSET
 
 N_DRONES = 3
 
@@ -30,53 +35,174 @@ receiver.enable(timestep)
 
 voxel_world = VoxelWorld(WORLD_ORIGIN, WORLD_SIZE, VOXEL_SIZE)
 
+# ── Layer gate: tracks how many bricks per layer have been picked up
+_layer_size  = pile_layer_size()
+pile_layer_taken = [0] * PILE_LAYERS   # confirmed pickups per layer
+
 # Brick lifecycle tracking
 unplaced  = deque(range(len(brick_targets)))  # brick_ids not yet placed
 placed    = set()                              # brick_ids successfully placed
 in_flight = {}                                 # drone_name -> brick_id being carried
 
-drone_positions = {}  # drone_name -> last known Vector3
+drone_positions  = {}  # drone_name -> last known Vector3
+drone_reserved   = {}  # drone_name -> list of waypoints currently marked in voxel_world
+waiting          = set()  # drone names blocked on a failed pathfind, awaiting a retry
+pile_in_progress = {}  # drone_name -> layer_idx of the pickup in progress
 
 takeoff_sent = False
 
 
-def _send_path_and_task(drone_name, goal, task_msg):
-    """Compute an A* path to goal and send PATH + task_msg to the drone."""
-    start = drone_positions.get(drone_name)
-    if start is not None:
-        path = find_path(voxel_world, start, goal)
-        if path and len(path) > 0:
-            wp_strs = ' '.join(f"{wp.x},{wp.y},{wp.z}" for wp in path)
-            emitter.send(f"{drone_name} PATH {wp_strs}".encode('utf-8'))
-            print(f"[CTRL] PATH ({len(path)} wps) → {drone_name} to ({goal.x:.2f},{goal.y:.2f},{goal.z:.2f})")
+def _path_msg(drone_name, start, goal, yaw=None, _collect=None):
+    """Compute A* path, mark it occupied, send PATH message. Returns True on success.
+
+    Temporarily frees the start voxel so the shared endpoint of the previous leg
+    (already marked) is a valid start for A*. Restores it on failure so another
+    drone's reservation isn't permanently corrupted.
+    """
+    start_was_occupied = voxel_world.is_occupied(start)
+    voxel_world.mark_free(start)
+    path = find_path(voxel_world, start, goal)
+    if path and len(path) > 0:
+        voxel_world.mark_path_occupied(path)
+        if _collect is not None:
+            _collect.extend(path)
+        wp_strs = ' '.join(f"{wp.x},{wp.y},{wp.z}" for wp in path)
+        yaw_prefix = f"YAW:{yaw:.4f} " if yaw is not None else ""
+        emitter.send(f"{drone_name} PATH {yaw_prefix}{wp_strs}".encode('utf-8'))
+        yaw_info = f" yaw={yaw:.1f}°" if yaw is not None else ""
+        print(f"[CTRL] PATH{yaw_info} ({len(path)} wps) ({start.x:.2f},{start.y:.2f},{start.z:.2f}) → ({goal.x:.2f},{goal.y:.2f},{goal.z:.2f})")
+        return True
+    else:
+        if start_was_occupied:
+            voxel_world.mark_occupied(start)  # restore another drone's voxel
+        print(f"[CTRL] No path ({start.x:.2f},{start.y:.2f},{start.z:.2f}) → ({goal.x:.2f},{goal.y:.2f},{goal.z:.2f}) — blocked")
+        return False
+
+
+def _retry_waiting():
+    """Re-attempt path assignment for every drone that was previously blocked."""
+    for drone in list(waiting):
+        waiting.discard(drone)
+        if drone in in_flight:
+            send_place_leg(drone, in_flight[drone])
         else:
-            print(f"[CTRL] No A* path found for {drone_name}: start=({start.x:.2f},{start.y:.2f},{start.z:.2f}) goal=({goal.x:.2f},{goal.y:.2f},{goal.z:.2f}), task will use fallback")
-    emitter.send(task_msg.encode('utf-8'))
+            assign_brick(drone)
+
+
+def _free_reservation(drone_name):
+    """Unmark all voxels reserved for this drone, then retry any blocked drones."""
+    freed = drone_reserved.pop(drone_name, [])
+    for wp in freed:
+        voxel_world.mark_free(wp)
+    if freed:
+        _retry_waiting()
+
+
+def _next_assignable_brick():
+    """Peek at unplaced queue; return brick_id only if its pile layer is open.
+
+    Layer N is open once all pickups from layers 0..N-1 are confirmed.
+    Returns None if the queue is empty or the layer gate is closed.
+    """
+    if not unplaced:
+        return None
+    brick_id = unplaced[0]
+    li = pile_layer_for_brick(brick_id)
+    for l in range(li):
+        if pile_layer_taken[l] < _layer_size:
+            return None   # upper layer still has bricks to pick up
+    return brick_id
 
 
 def assign_brick(drone_name):
-    """Assign the next unplaced brick: pathfind to pile approach, then send TASK PICKUP."""
-    if not unplaced or drone_name in in_flight:
+    """Assign the next unplaced brick: 3-leg path (ascend → cruise → descend) to pickup."""
+    cur = drone_positions.get(drone_name)
+    if cur is None or drone_name in in_flight or drone_name in waiting:
         return
-    brick_id = unplaced.popleft()
+
+    brick_id = _next_assignable_brick()
+    if brick_id is None:
+        if unplaced:
+            waiting.add(drone_name)
+            print(f"[CTRL] {drone_name}: waiting for pile layer to complete")
+        return
+
+    pile_pos = pile_pos_for_brick(brick_id)   # bottom of brick
+    if pile_pos is None:
+        print(f"[CTRL] No pile position for brick {brick_id}")
+        return
+
+    layer_idx = pile_layer_for_brick(brick_id)
+    _free_reservation(drone_name)
+    unplaced.popleft()   # commit — position is deterministic from brick_id
+
+    hover   = Vector3(pile_pos.x, pile_pos.y, pile_pos.z + PICKUP_HOVER_OFFSET)
+    p1_goal = Vector3(cur.x,    cur.y,    TASK_ALT)
+    p2_goal = Vector3(hover.x,  hover.y,  TASK_ALT)
+    p3_goal = hover
+
+    wps = []
+    ok = (_path_msg(drone_name, cur,     p1_goal,          _collect=wps) and
+          _path_msg(drone_name, p1_goal, p2_goal,          _collect=wps) and
+          _path_msg(drone_name, p2_goal, p3_goal, yaw=0.0, _collect=wps))
+
+    if not ok:
+        for wp in wps:
+            voxel_world.mark_free(wp)
+        unplaced.appendleft(brick_id)
+        waiting.add(drone_name)
+        print(f"[CTRL] {drone_name}: path to pile blocked, waiting")
+        return
+
+    drone_reserved[drone_name] = wps
     in_flight[drone_name] = brick_id
-    pile = PILE_POSITION
-    approach = Vector3(pile.x, pile.y, TASK_ALT)
-    task_msg = f"{drone_name} TASK PICKUP {brick_id} {pile.x:.4f} {pile.y:.4f}"
-    _send_path_and_task(drone_name, approach, task_msg)
-    print(f"[CTRL] Assigned brick {brick_id} to {drone_name}")
+    pile_in_progress[drone_name] = layer_idx
+    emitter.send(
+        f"{drone_name} TASK PICKUP {brick_id} "
+        f"{hover.x:.4f} {hover.y:.4f} {hover.z:.4f} 0.0"
+        .encode('utf-8')
+    )
+    print(f"[CTRL] Assigned brick {brick_id} to {drone_name} → pile layer {layer_idx} "
+          f"({pile_pos.x:.2f},{pile_pos.y:.2f},{pile_pos.z:.2f})")
 
 
 def send_place_leg(drone_name, brick_id):
-    """After PICKUP: pathfind to target approach, then send TASK PLACE."""
+    """After PICKUP: 3-leg path (ascend → cruise → descend) to place position.
+
+    If any leg is blocked, this drone is added to `waiting` for a later retry.
+    The TASK PLACE message is only sent once a valid path is found.
+    """
+    _free_reservation(drone_name)
+    cur = drone_positions.get(drone_name)
     target = brick_targets[brick_id]
     tx, ty, tz = target.position.x, target.position.y, target.position.z
-    approach = Vector3(tx, ty, TASK_ALT)
-    task_msg = (
+    place_z = max(tz + PLACE_ALT_OFFSET, PICKUP_ALT)
+    place_yaw = target.rotationZ
+
+    if cur is None:
+        print(f"[CTRL] No position for {drone_name}, PLACE task will use fallback")
+    else:
+        p1_goal = Vector3(cur.x, cur.y, TASK_ALT)
+        p2_goal = Vector3(tx, ty, TASK_ALT)
+        p3_goal = Vector3(tx, ty, place_z)
+        wps = []
+        ok = (_path_msg(drone_name, cur,     p1_goal,                   _collect=wps) and
+              _path_msg(drone_name, p1_goal, p2_goal,                   _collect=wps) and
+              _path_msg(drone_name, p2_goal, p3_goal, yaw=place_yaw,   _collect=wps))
+
+        if not ok:
+            for wp in wps:
+                voxel_world.mark_free(wp)
+            waiting.add(drone_name)
+            print(f"[CTRL] {drone_name}: path to place brick {brick_id} blocked, waiting")
+            return
+
+        drone_reserved[drone_name] = wps
+
+    emitter.send((
         f"{drone_name} TASK PLACE {brick_id} "
         f"{tx:.4f} {ty:.4f} {tz:.4f} {target.rotationZ:.4f}"
-    )
-    _send_path_and_task(drone_name, approach, task_msg)
+    ).encode('utf-8'))
 
 
 while robot.step(timestep) != -1:
@@ -101,6 +227,12 @@ while robot.step(timestep) != -1:
             name = parts[0]
             try:
                 brick_id = int(parts[2])
+                if name in pile_in_progress:
+                    li = pile_in_progress.pop(name)
+                    pile_layer_taken[li] += 1
+                    done = pile_layer_taken[li] == _layer_size
+                    print(f"[CTRL] Pile layer {li}: {pile_layer_taken[li]}/{_layer_size} picked up"
+                          + (" — layer complete" if done else ""))
                 send_place_leg(name, brick_id)
             except ValueError:
                 pass
