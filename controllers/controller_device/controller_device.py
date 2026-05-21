@@ -9,7 +9,7 @@ from shared.pathfinder import find_path
 from shared.brick_parser import parse_brick_file, to_world_coords
 from shared.pile_layout import (
     configure, pile_pos_for_brick, pile_layer_for_brick,
-    pile_layer_size, pile_layers_for_count,
+    pile_layer_size, pile_layer_count_for_layer, pile_layers_for_count,
     PICKUP_HOVER_OFFSET, PILE_POSITION,
 )
 from shared.config import (
@@ -110,7 +110,7 @@ def _next_assignable_brick():
     if li >= _n_layers:
         return brick_id   # brick beyond computed layers — no gate to check
     for l in range(li):
-        if pile_layer_taken[l] < _layer_size:
+        if pile_layer_taken[l] < pile_layer_count_for_layer(l):
             return None   # upper layer still has bricks to pick up
     return brick_id
 
@@ -232,8 +232,9 @@ while robot.step(timestep) != -1:
                     li = pile_in_progress.pop(name)
                     if li < _n_layers:
                         pile_layer_taken[li] += 1
-                        done = pile_layer_taken[li] == _layer_size
-                        print(f"[CTRL] Pile layer {li}: {pile_layer_taken[li]}/{_layer_size} picked up"
+                        layer_count = pile_layer_count_for_layer(li)
+                        done = pile_layer_taken[li] == layer_count
+                        print(f"[CTRL] Pile layer {li}: {pile_layer_taken[li]}/{layer_count} picked up"
                               + (" — layer complete" if done else ""))
                 send_place_leg(name, brick_id)
             except ValueError:
@@ -245,6 +246,7 @@ while robot.step(timestep) != -1:
                 brick_id = int(parts[2])
                 placed.add(brick_id)
                 in_flight.pop(name, None)
+                voxel_world.mark_occupied(brick_targets[brick_id].position)
                 print(f"[CTRL] Brick {brick_id} placed by {name}. "
                       f"Progress: {len(placed)}/{len(brick_targets)}")
                 assign_brick(name)

@@ -6,13 +6,11 @@ from .vector3_int import Vector3Int
 from .path import Path
 from .voxel_world import VoxelWorld
 
-# All 26 neighbours (face, edge, and corner adjacency)
+# 6-connected face-adjacent neighbours only (no diagonals)
 _NEIGHBOURS = [
-    Vector3Int(dx, dy, dz)
-    for dx in (-1, 0, 1)
-    for dy in (-1, 0, 1)
-    for dz in (-1, 0, 1)
-    if not (dx == 0 and dy == 0 and dz == 0)
+    Vector3Int(1, 0, 0), Vector3Int(-1, 0, 0),
+    Vector3Int(0, 1, 0), Vector3Int(0, -1, 0),
+    Vector3Int(0, 0, 1), Vector3Int(0, 0, -1),
 ]
 
 _STEP_COSTS = {
