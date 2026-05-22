@@ -6,7 +6,9 @@ from .vector3_int import Vector3Int
 from .path import Path
 from .voxel_world import VoxelWorld
 
-# 6-connected face-adjacent neighbours only (no diagonals)
+# 6-connected (face-adjacent) movement only — no diagonals.
+# Diagonals would allow drones to slip through voxel corners, creating apparent
+# collisions with occupied cells that share only an edge.
 _NEIGHBOURS = [
     Vector3Int(1, 0, 0), Vector3Int(-1, 0, 0),
     Vector3Int(0, 1, 0), Vector3Int(0, -1, 0),
@@ -26,9 +28,12 @@ def _h(a: Vector3Int, b: Vector3Int) -> float:
 def find_path(world: VoxelWorld, start: Vector3, goal: Vector3, goal_tolerance: int = 2):
     """Return a Path of world-space waypoints from start to goal, or None if unreachable.
 
-    If the exact goal voxel is occupied, searches nearby voxels in XY (same Z) within
-    goal_tolerance voxels and uses the nearest free one. This lets drones reach positions
-    that are slightly blocked without failing entirely.
+    Euclidean distance is used as the A* heuristic — admissible and consistent for a
+    uniform-cost grid, so the first path found is always optimal.
+
+    If the exact goal voxel is occupied (e.g. another drone already reserved it),
+    the nearest free voxel within goal_tolerance in XY at the same Z is tried instead.
+    This prevents hard failures when two drones target adjacent pile positions.
     """
     sv = world.world_to_voxel(start)
     gv = world.world_to_voxel(goal)
@@ -60,8 +65,15 @@ def find_path(world: VoxelWorld, start: Vector3, goal: Vector3, goal_tolerance: 
     came_from = {}
     g_score = {sv: 0.0}
     closed = set()
+    # Guard against runaway search on degenerate worlds (max nodes << world size)
+    MAX_ITER = 50_000
+    _iter = 0
 
     while open_heap:
+        _iter += 1
+        if _iter > MAX_ITER:
+            print(f"[A*] Exceeded {MAX_ITER} iterations — aborting pathfind")
+            return None
         _, g, current = heapq.heappop(open_heap)
 
         if current in closed:

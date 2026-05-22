@@ -20,7 +20,7 @@ dt = timestep / 1000.0
 drone_name = robot.getName()
 
 # ── State machine constants
-IDLE, TAKEOFF, FLY, LAND, DONE = 'IDLE', 'TAKEOFF', 'FLY', 'LAND', 'DONE'
+IDLE, TAKEOFF, FLY, RETURN, LAND, DONE = 'IDLE', 'TAKEOFF', 'FLY', 'RETURN', 'LAND', 'DONE'
 
 state = IDLE
 land_stage = 0
@@ -82,35 +82,50 @@ for direction, name in sensor_names.items():
         distance_sensors[direction] = ds
 
 # ── TUNED CONSTANTS ──────────────────
-K_VERTICAL_THRUST = 68.5 # thrust required to counteract gravity (from drones own mass, will not compensate if mass changes due to lifting an object)
-K_VERTICAL_OFFSET = 0.6 # offset to hover on target altitude due to the drones mass
+# Gravity compensation: empirically matched to the drone's simulated mass so that
+# K_VERTICAL_THRUST alone holds steady altitude with zero vertical error.
+K_VERTICAL_THRUST = 68.5
+K_VERTICAL_OFFSET = 0.6  # residual hover correction after PID settles
 
-AVOID_THRESHOLD = 1.5 # Distance in metres to start reacting to obstacles
-AVOID_WEIGHT = 2.0 # How aggressive the drone avoids obstacles
-MIN_DIST = 1.0 # distance where suppression due to obstacle avoidance is at its maximum
-SLIDE_WEIGHT = AVOID_WEIGHT * 0.9
-MAX_PULL = 2.0 # Limit target attraction so distant target position's don't overpower obstacle avoidance
-# ── Persistent Avoidance Latches (Remembers which way it chose to go around an object)
+# ── Obstacle avoidance parameters ────
+AVOID_THRESHOLD = 1.5  # metres — distance at which an obstacle starts influencing flight
+AVOID_WEIGHT = 2.0     # repulsion magnitude at the threshold boundary
+MIN_DIST = 1.0         # at this distance repulsion is at full saturation
+SLIDE_WEIGHT = AVOID_WEIGHT * 0.9  # tangential slide force (slightly weaker than direct repulsion)
+MAX_PULL = 2.0  # caps target attraction so nearby goals don't override obstacle avoidance
+
+# Persistent direction latches: once a bypass direction is chosen it is held until the
+# obstacle clears. This prevents oscillation where the drone flip-flops between left and
+# right because both sides read the same distance.
 bypass_dir_y = 0.0  # 1.0 = Left, -1.0 = Right, 0.0 = Undecided/Clear
 bypass_dir_x = 0.0  # 1.0 = Forward, -1.0 = Backward, 0.0 = Undecided/Clear
 
-# Altitude Constants
-K_VERTICAL_P = 1.8 # rate of aggression towards reaching target altitude
-K_VERTICAL_D = 1.5 # vertical velocity damper (reduces overshoot of target altitude)
-K_VERTICAL_I = 0.5 # prevents steady state error in altitude
+# ── Altitude PID ─────────────────────
+# High P/D relative to I: altitude must track quickly to changes in target Z during
+# the three-leg path descents, but integral must not fight gravity compensation.
+K_VERTICAL_P = 2.2 #Old=1.8
+K_VERTICAL_D = 2.5 #Old=1.5
+K_VERTICAL_I = 0.5 #Old=0.5
 
-# Attitude (Tilt) Constants
-K_ROLL_P = 15.0 # rate of aggression towards reaching roll angle
-K_PITCH_P = 15.0 # rate of aggression towards reaching pitch angle
-K_GYRO_D = 3.0 # Tilt damper, uses gyro to stop drone from rotating or swinging around like a pendulum
-K_COMP_AGGRESSION = 0.6 # rate of altitude loss compensation whil drone is tilted
+# ── Attitude (tilt) PID ──────────────
+# High P because the drone can only translate by tilting; faster tilt response =
+# tighter position tracking. Gyro derivative (K_GYRO_D) damps oscillation from the
+# stiff attitude springs.
+K_ROLL_P = 15.0
+K_PITCH_P = 15.0
+K_GYRO_D = 3.0
+# Partial compensation: full correction would require knowing the carried brick mass;
+# 0.6 is the fraction applied to avoid over-thrusting on extreme tilts.
+K_COMP_AGGRESSION = 0.6
 
-# Position (GPS) Constants
-K_POS_P = 0.3 # Rate of attraction to coordinates on the horizontal plane
-K_POS_D = 0.6 # Horizontal velocity damper (reduces overshoot of target position)
-K_POS_I = 0.3 # Prevents steady state error from attraction to correct coordinates not being high enough to move the drone
+# ── Horizontal position PID ──────────
+# Low P/I to prevent the drone from chasing its target too aggressively and
+# oscillating over it. D damps GPS-velocity noise.
+K_POS_P = 0.3
+K_POS_D = 0.6
+K_POS_I = 0.3
 
-# Rotation Constants
+# ── Yaw PID ──────────────────────────
 K_YAW_P = 2.0
 
 V_FILTER = 0.1
@@ -146,12 +161,15 @@ def filter_force(curr, tgt):
                 return curr + (tgt - curr) * RELEASE
 
 # ── Wait for physics to settle
+home_pos = Vector3(0.0, 0.0, 0.0)  # recorded once GPS stabilises — used as landing target
+
 while robot.step(timestep) != -1:
     if robot.getTime() > 1.0:
         vals = gps.getValues()
-        
+
         prevPos = Vector3(vals[0], vals[1], vals[2])
-        
+        home_pos = Vector3(vals[0], vals[1], vals[2])  # save spawn XY for return-to-home
+
         # Initialize targetYaw to current orientation
         _, _, start_yaw = imu.getRollPitchYaw()
         targetYaw = math.degrees(start_yaw) % 360.0

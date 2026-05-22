@@ -59,6 +59,16 @@ while robot.step(timestep) != -1:
                     targetYaw = yaw
                     state = TAKEOFF
                     print(f'>> [COMMS] TAKEOFF command received')
+            elif len(parts) == 2 and parts[0] == drone_name and parts[1] == 'LAND':
+                if state == FLY:
+                    # Clear any pending work and return to the spawn position before landing.
+                    current_path = None
+                    path_queue.clear()
+                    task_queue.clear()
+                    current_task = None
+                    targetPos = Vector3(home_pos.x, home_pos.y, TAKEOFF_ALT)
+                    state = RETURN
+                    print(f'>> [COMMS] LAND command received — returning to home ({home_pos.x:.2f},{home_pos.y:.2f})')
             elif len(parts) == 8 and parts[0] == drone_name and parts[1] == 'TASK' and parts[2] == 'PICKUP':
                 try:
                     brick_id = int(parts[3])
@@ -141,8 +151,19 @@ while robot.step(timestep) != -1:
             print(f'>> AUTO-LAND initiated at current position')
         key = kb.getKey() 
         
-    # 4. State Management & Periodic Debug Printing
+    # 4. State Machine
+    # IDLE → TAKEOFF on command; TAKEOFF → FLY once cruise altitude is reached;
+    # FLY is the normal operating state; RETURN flies back to home XY then hands off
+    # to LAND; LAND triggers staged descent; DONE cuts motors.
     print_counter += 1
+    if state == RETURN:
+        xy_dist = math.sqrt((currentPos.x - home_pos.x) ** 2 + (currentPos.y - home_pos.y) ** 2)
+        if xy_dist < TASK_ARRIVAL_THRESHOLD:
+            state = LAND
+            land_stage = 0
+            land_stage_timer = t
+            print(f'>> Arrived at home position, beginning auto-land')
+
     if state == TAKEOFF and abs(currentPos.z - TAKEOFF_ALT) < ALT_REACHED:
         state = FLY
         if current_path is not None and path_index < len(current_path):
@@ -156,9 +177,15 @@ while robot.step(timestep) != -1:
     if state == FLY and print_counter % 100 == 0:
         # Periodic status update
         actual_yaw_deg = math.degrees(yaw) % 360.0
-        print(f'Target: (X: {targetPos.x:.2f}, Y: {targetPos.y:.2f}) | Yaw: {targetYaw:.2f}° | Altitude: {targetPos.z:.2f})\nActual: (X: {currentPos.x:.2f}, Y: {currentPos.y:.2f}) | Yaw: {targetYaw:.2f}° | Altitude: {currentPos.z:.2f}')
+        #print(f'Target: (X: {targetPos.x:.2f}, Y: {targetPos.y:.2f}) | Yaw: {targetYaw:.2f}° | Altitude: {targetPos.z:.2f})\nActual: (X: {currentPos.x:.2f}, Y: {currentPos.y:.2f}) | Yaw: {actual_yaw_deg:.2f}° | Altitude: {currentPos.z:.2f}')
 
     # Advance through path waypoints when the current one is reached.
+    # Each brick task uses three path legs sent sequentially:
+    #   1. Ascend to cruise altitude directly above current position
+    #   2. Cruise horizontally to above the target (pile or placement site)
+    #   3. Descend to pickup/place altitude
+    # Separating ascend and cruise prevents drones from cutting diagonally through
+    # the pile or the partially-built structure at low altitude.
     if state == FLY and current_path is not None and path_index < len(current_path):
         wp = current_path[path_index]
         dist_3d = Vector3.distance(currentPos, wp)
@@ -240,7 +267,7 @@ while robot.step(timestep) != -1:
     body_ex = ex * cosY + ey * sinY
     body_ey = ey * cosY - ex * sinY
     
-    if state in [FLY, TAKEOFF, LAND]:
+    if state in [FLY, TAKEOFF, LAND, RETURN]:
         pull_mag = math.sqrt(body_ex**2 + body_ey**2)
         if pull_mag > MAX_PULL:
             body_ex = (body_ex / pull_mag) * MAX_PULL
@@ -334,7 +361,7 @@ while robot.step(timestep) != -1:
             if l_val < AVOID_THRESHOLD or r_val < AVOID_THRESHOLD:
                 closest_left_right = min(l_val, r_val)
                 # Linear blend: 0.0 when very close, scales to 1.0 right at the threshold edge
-                raw_scale_y = clamp((closest_left_right - MIN_DIST) / AVOID_THRESHOLD - MIN_DIST, 0.0, 1.0)
+                raw_scale_y = clamp((closest_left_right - MIN_DIST) / (AVOID_THRESHOLD - MIN_DIST), 0.0, 1.0)
                 
                 # Suppress forward / backward target tracking, preventing cross axis tug of war
                 raw_scale_x = raw_scale_y
@@ -426,13 +453,11 @@ while robot.step(timestep) != -1:
         
         yaw_input = (K_YAW_P * yaw_error) - (yaw_vel * K_GYRO_D)
         
-        # Altitude loss compensation while moving
-        # calculate thrust loss due to tilt
+        # Thrust compensation for altitude loss during horizontal movement.
+        # When tilted the vertical component of thrust = thrust × cos(roll) × cos(pitch).
+        # Boosting by the inverse recovers lost lift. The 0.707 floor caps boost at 40 %
+        # (≈45° tilt) to avoid motor saturation on aggressive manoeuvres.
         cos_factor = math.cos(roll) * math.cos(pitch)
-        
-        # "ideal" multiplier for counteracting gravity
-        # clamp factor to prevent motor oversaturation (maximum 40% boost)
-        # 0.707 corresponss to ~45 degree tilt
         boost_requirement = 1.0 / max(cos_factor, 0.707)
         
         thrustCompensation = 1.0 + (boost_requirement - 1.0) * K_COMP_AGGRESSION

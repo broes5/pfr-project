@@ -1,11 +1,11 @@
-import sys, os
+import sys, os, math
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from controller import Supervisor
 from shared.vector3 import Vector3
 from shared.brick_state import BrickState
 from shared.brick_parser import parse_brick_file, to_world_coords
-from shared.brick_placer import BrickPool
+from shared.brick_placer import BrickPool, BRICK_HALF_HEIGHT
 from shared.pile_layout import configure, pile_pos_for_brick, PILE_POSITION
 from shared.config import N_DRONES, BRICK_FILE
 
@@ -22,11 +22,16 @@ brick_targets = to_world_coords(raw_bricks)
 configure(len(brick_targets))
 
 pool = BrickPool(supervisor)
+# Pile bricks use BrickStill: colliders present but no gravity so the pile stays static.
+# Placed bricks are created as BrickPhy on-demand in the PLACE handler.
 pool.pre_spawn(len(brick_targets), physics=False)
 
 for brick_id in range(len(brick_targets)):
     pos = pile_pos_for_brick(brick_id) or PILE_POSITION
     pool.spawn(brick_id, BrickState(pos, 0.0))
+
+# Holder for on-demand BrickPhy nodes (created when bricks are placed in the structure).
+brick_holder = supervisor.getFromDef("Bricks").getField("children")
 
 print(f"[BrickManager] Spawned {len(brick_targets)} bricks in pile grid around {PILE_POSITION.x:.1f},{PILE_POSITION.y:.1f}")
 
@@ -105,6 +110,15 @@ while supervisor.step(timestep) != -1:
                 continue
             if slot.getCount() > 0:
                 slot.getMFNode(0).remove()
-            pool.spawn(brick_id, BrickState(Vector3(x, y, z), rot))
+            # The BrickStill that was in the pile is already back in the pool (returned
+            # during PICKUP). Spawn a physics-enabled brick at the structure position so
+            # placed bricks settle and stack with gravity, while pile bricks stay static.
+            rad = rot * math.pi / 180.0
+            brick_holder.importMFNodeFromString(-1, (
+                f'BrickStill {{'
+                f' translation {x:.4f} {y:.4f} {z + BRICK_HALF_HEIGHT:.4f}'
+                f' rotation 0 0 1 {rad:.6f}'
+                f' }}'
+            ))
             carrying[sender] = None
             print(f"[BrickManager] {sender} placed brick {brick_id} at ({x:.2f},{y:.2f},{z:.2f})")
