@@ -103,9 +103,9 @@ bypass_dir_x = 0.0  # 1.0 = Forward, -1.0 = Backward, 0.0 = Undecided/Clear
 # ── Altitude PID ─────────────────────
 # High P/D relative to I: altitude must track quickly to changes in target Z during
 # the three-leg path descents, but integral must not fight gravity compensation.
-K_VERTICAL_P = 2.2 #Old=1.8
-K_VERTICAL_D = 2.5 #Old=1.5
-K_VERTICAL_I = 0.5 #Old=0.5
+K_VERTICAL_P = 2.2
+K_VERTICAL_D = 2.5
+K_VERTICAL_I = 0.5
 
 # ── Attitude (tilt) PID ──────────────
 # High P because the drone can only translate by tilting; faster tilt response =
@@ -176,13 +176,3 @@ while robot.step(timestep) != -1:
         print(f'Physics settled. Initial GPS: {prevPos.x:.2f}, {prevPos.y:.2f}\n\n')
         break
 
-#print("──────────────────────────────────────────────")
-#print("                 CONTROLS                     ")
-#print("──────────────────────────────────────────────")
-
-#print("\nT = Takeoff")
-
-#print("──────────────   While Flying   ──────────────")
-#print("L = Land")
-#print("WASD = Move Target")
-#print("Arrow keys = Change Target Altitude/Yaw")

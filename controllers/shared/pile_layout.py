@@ -1,7 +1,6 @@
-import sys, os, math
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+import math
 
-from shared.vector3 import Vector3
+from .vector3 import Vector3
 
 PILE_POSITION       = Vector3(-4.0, 0.0, 0.0)
 PILE_COLS           = 5

@@ -174,11 +174,6 @@ while robot.step(timestep) != -1:
             targetPos.y = currentPos.y
             print(f'>> TAKEOFF COMPLETE. Holding position at X:{targetPos.x:.2f}, Y:{targetPos.y:.2f}. Switching to fly state')
     
-    if state == FLY and print_counter % 100 == 0:
-        # Periodic status update
-        actual_yaw_deg = math.degrees(yaw) % 360.0
-        #print(f'Target: (X: {targetPos.x:.2f}, Y: {targetPos.y:.2f}) | Yaw: {targetYaw:.2f}° | Altitude: {targetPos.z:.2f})\nActual: (X: {currentPos.x:.2f}, Y: {currentPos.y:.2f}) | Yaw: {actual_yaw_deg:.2f}° | Altitude: {currentPos.z:.2f}')
-
     # Advance through path waypoints when the current one is reached.
     # Each brick task uses three path legs sent sequentially:
     #   1. Ascend to cruise altitude directly above current position
@@ -189,9 +184,6 @@ while robot.step(timestep) != -1:
     if state == FLY and current_path is not None and path_index < len(current_path):
         wp = current_path[path_index]
         dist_3d = Vector3.distance(currentPos, wp)
-        #if print_counter % 100 == 0:
-            #print(f'[PATH] idx={path_index}/{len(current_path)-1} | dist_3d={dist_3d:.3f} | threshold={WAYPOINT_THRESHOLD}')
-            #print(f'[PATH] pos=({currentPos.x:.2f},{currentPos.y:.2f},{currentPos.z:.2f}) | wp=({wp.x:.2f},{wp.y:.2f},{wp.z:.2f})')
         if dist_3d < WAYPOINT_THRESHOLD:
             path_index += 1
             if path_index < len(current_path):
@@ -500,4 +492,3 @@ while robot.step(timestep) != -1:
     if state == DONE:
         for m in [fl, fr, rl, rr]:
             m.setVelocity(0.0)
-            continue # skip PID and mixer this step

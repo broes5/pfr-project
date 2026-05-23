@@ -1,8 +1,7 @@
-import sys, os, math
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+import math
 
-from shared.vector3 import Vector3
-from shared.brick_state import BrickState
+from .vector3 import Vector3
+from .brick_state import BrickState
 
 POOL_POSITION = Vector3(0, 0, -10)
 BRICK_HALF_HEIGHT = 0.075
@@ -32,13 +31,13 @@ class BrickPool:
         proto = "BrickPhy" if physics else "BrickStill"
         p = POOL_POSITION
         start_index = holder.getCount()
+        node_str = (
+            f'{proto} {{ '
+            f'translation {p.x} {p.y} {p.z} '
+            f'rotation 0 0 1 0 '
+            f'}}'
+        )
         for _ in range(count):
-            node_str = (
-                f'{proto} {{ '
-                f'translation {p.x} {p.y} {p.z} '
-                f'rotation 0 0 1 0 '
-                f'}}'
-            )
             holder.importMFNodeFromString(-1, node_str)
         # importMFNodeFromString is not synchronous on all platforms — step once
         # to flush pending imports before reading back node references.
@@ -88,6 +87,3 @@ class BrickPool:
         ])
         node.getField("rotation").setSFRotation([0, 0, 1, rad])
 
-    @staticmethod
-    def brick_name(brick_id: int) -> str:
-        return f"brick_{brick_id:03d}"
