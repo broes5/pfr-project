@@ -32,13 +32,13 @@ class BrickPool:
         proto = "BrickPhy" if physics else "BrickStill"
         p = POOL_POSITION
         start_index = holder.getCount()
+        node_str = (
+            f'{proto} {{ '
+            f'translation {p.x} {p.y} {p.z} '
+            f'rotation 0 0 1 0 '
+            f'}}'
+        )
         for _ in range(count):
-            node_str = (
-                f'{proto} {{ '
-                f'translation {p.x} {p.y} {p.z} '
-                f'rotation 0 0 1 0 '
-                f'}}'
-            )
             holder.importMFNodeFromString(-1, node_str)
         # importMFNodeFromString is not synchronous on all platforms — step once
         # to flush pending imports before reading back node references.
