@@ -104,7 +104,7 @@ bypass_dir_x = 0.0  # 1.0 = Forward, -1.0 = Backward, 0.0 = Undecided/Clear
 # High P/D relative to I: altitude must track quickly to changes in target Z during
 # the three-leg path descents, but integral must not fight gravity compensation.
 K_VERTICAL_P = 2.2
-K_VERTICAL_D = 2.5
+K_VERTICAL_D = 4.0
 K_VERTICAL_I = 0.5
 
 # ── Attitude (tilt) PID ──────────────
@@ -122,7 +122,7 @@ K_COMP_AGGRESSION = 0.6
 # Low P/I to prevent the drone from chasing its target too aggressively and
 # oscillating over it. D damps GPS-velocity noise.
 K_POS_P = 0.3
-K_POS_D = 0.6
+K_POS_D = 0.8
 K_POS_I = 0.3
 
 # ── Yaw PID ──────────────────────────

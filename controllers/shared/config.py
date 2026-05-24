@@ -5,14 +5,14 @@ BRICK_FILE = "../instructions/ben.txt"  # target structure definition (242 brick
 # ── Flight altitudes (shared between controller_device and drone) ─────────────
 TASK_ALT         = 3.0   # cruise altitude during transit — high enough to clear the pile and structure
 TAKEOFF_ALT      = 3.0   # target altitude after takeoff
-PICKUP_ALT       = 0.15  # hover floor at pile: just above a brick so the drone can grab it
-PLACE_ALT_OFFSET = 0.15  # approach this far above the target brick z before signalling PLACE
+PICKUP_ALT       = 0.17  # hover floor at pile: just above a brick so the drone can grab it
+PLACE_ALT_OFFSET = 0.17  # approach this far above the target brick z before signalling PLACE
 
 # ── Drone task thresholds ─────────────────────────────────────────────────────
 # Loose waypoint threshold (0.5 m) keeps drones moving without requiring pixel-perfect alignment.
 # Tight arrival threshold (0.2 m) ensures the PICKUP/PLACE signal fires close to the actual brick.
 TASK_ARRIVAL_THRESHOLD = 0.20  # m — 3D distance to task pos before emitting PICKUP/PLACE signal
-WAYPOINT_THRESHOLD     = 0.50  # m — advance to next waypoint when within this distance
+WAYPOINT_THRESHOLD     = 0.60  # m — advance to next waypoint when within this distance
 
 # ── Feature flags ─────────────────────────────────────────────────────────────
 OBSTACLE_AVOIDANCE = False  # distance-sensor-based inter-drone collision avoidance
