@@ -43,11 +43,13 @@ unplaced  = deque(range(len(brick_targets)))  # brick_ids not yet placed
 placed    = set()                              # brick_ids successfully placed
 in_flight = {}                                 # drone_name -> brick_id being carried
 
-drone_positions  = {}  # drone_name -> last known Vector3
-drone_reserved   = {}  # drone_name -> list of waypoints currently marked in voxel_world
-waiting          = set()  # drone names blocked on a failed pathfind, awaiting a retry
-waiting_since    = {}  # drone_name -> sim time when it was added to waiting
-pile_in_progress = {}  # drone_name -> layer_idx of the pickup in progress
+drone_positions       = {}  # drone_name -> last known Vector3
+drone_first_positions = {}  # drone_name -> first position ever reported (used as rest bay XY)
+drone_reserved        = {}  # drone_name -> list of waypoints currently marked in voxel_world
+waiting               = set()  # drone names blocked on a failed pathfind, awaiting a retry
+waiting_since         = {}  # drone_name -> sim time when it was added to waiting
+pile_in_progress      = {}  # drone_name -> layer_idx of the pickup in progress
+resting               = set()  # drone names that have been routed to their rest bay
 
 # After this many seconds without a path clearing, force a retry regardless.
 STUCK_TIMEOUT = 30.0
@@ -127,7 +129,7 @@ def _next_assignable_brick():
 def assign_brick(drone_name, t=0.0):
     """Assign the next unplaced brick: 3-leg path (ascend → cruise → descend) to pickup."""
     cur = drone_positions.get(drone_name)
-    if cur is None or drone_name in in_flight or drone_name in waiting:
+    if cur is None or drone_name in in_flight or drone_name in waiting or drone_name in resting:
         return
 
     brick_id = _next_assignable_brick()
@@ -136,6 +138,22 @@ def assign_brick(drone_name, t=0.0):
             waiting.add(drone_name)
             waiting_since[drone_name] = t
             print(f"[CTRL] {drone_name}: waiting for pile layer to complete")
+        else:
+            # No bricks remain — route drone to its dedicated rest bay
+            first = drone_first_positions[drone_name]
+            rest = Vector3(first.x, first.y, TASK_ALT)
+            p1 = Vector3(cur.x, cur.y, TASK_ALT)
+            _free_reservation(drone_name, t)
+            wps = []
+            ok = (_path_msg(drone_name, cur, p1, _collect=wps) and
+                  _path_msg(drone_name, p1, rest, _collect=wps))
+            if ok:
+                drone_reserved[drone_name] = wps
+                resting.add(drone_name)
+                print(f"[CTRL] {drone_name}: no bricks left — routing to rest bay "
+                      f"({rest.x:.2f},{rest.y:.2f},{rest.z:.2f})")
+            else:
+                print(f"[CTRL] {drone_name}: path to rest bay blocked, will retry")
         return
 
     pile_pos = pile_pos_for_brick(brick_id)   # bottom of brick
@@ -230,6 +248,8 @@ while robot.step(timestep) != -1:
             try:
                 cur = Vector3.from_msg(' '.join(parts[2:5]))
                 drone_positions[name] = cur
+                if name not in drone_first_positions:
+                    drone_first_positions[name] = cur
                 # Wait until t≥6 s and the drone is at 70 % of cruise altitude before
                 # assigning work.  The 6 s window covers the physics-settle delay plus
                 # the time all four drones need to reach TAKEOFF_ALT simultaneously,

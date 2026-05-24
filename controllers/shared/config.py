@@ -1,6 +1,6 @@
 # ── Fleet ────────────────────────────────────────────────────────────────────
 N_DRONES   = 4            # number of drones to spawn and coordinate
-BRICK_FILE = "../instructions/ben.txt"  # target structure definition (242 bricks, 6 layers)
+BRICK_FILE = "../instructions/few.txt"  # target structure definition (242 bricks, 6 layers)
 
 # ── Flight altitudes (shared between controller_device and drone) ─────────────
 TASK_ALT         = 3.0   # cruise altitude during transit — high enough to clear the pile and structure
@@ -19,5 +19,5 @@ OBSTACLE_AVOIDANCE = False  # distance-sensor-based inter-drone collision avoida
 
 # ── Starting formation ────────────────────────────────────────────────────────
 DRONE_SPACING = 1.5   # m between drones in the initial line formation
-DRONE_START_X = 2.0   # starting X (forward of origin)
+DRONE_START_X = -2.0   # starting X (forward of origin)
 DRONE_START_Z = 0.065 # ground level clearance at spawn
