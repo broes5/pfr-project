@@ -48,6 +48,70 @@ class VoxelWorld:
         for wp in path:
             self.mark_free(wp)
 
+    def mark_neighborhood_occupied(self, pos: Vector3, radius: int = 1) -> list:
+        center = self.world_to_voxel(pos)
+        claimed = []
+        for dx in range(-radius, radius + 1):
+            for dy in range(-radius, radius + 1):
+                for dz in range(-radius, radius + 1):
+                    nbr = Vector3Int(center.x + dx, center.y + dy, center.z + dz)
+                    if self.in_bounds(nbr):
+                        self._grid[nbr.x, nbr.y, nbr.z] = True
+                        claimed.append(self.voxel_to_world(nbr))
+        return claimed
+
+    def free_neighborhood(self, pos: Vector3, radius: int = 1) -> list:
+        """Free a neighbourhood and return the Vector3Int coords that were occupied."""
+        center = self.world_to_voxel(pos)
+        freed = []
+        for dx in range(-radius, radius + 1):
+            for dy in range(-radius, radius + 1):
+                for dz in range(-radius, radius + 1):
+                    nbr = Vector3Int(center.x + dx, center.y + dy, center.z + dz)
+                    if self.in_bounds(nbr) and self._grid[nbr.x, nbr.y, nbr.z]:
+                        freed.append(nbr)
+                        self._grid[nbr.x, nbr.y, nbr.z] = False
+        return freed
+
+    def restore_voxels(self, voxels: list):
+        """Re-mark a list of Vector3Int voxels as occupied."""
+        for v in voxels:
+            if self.in_bounds(v):
+                self._grid[v.x, v.y, v.z] = True
+
+    def mark_path_neighborhood_occupied(self, path, radius: int = 1) -> list:
+        """Mark a 3x3x3 neighbourhood for every voxel along each segment of the path.
+
+        Interpolates at voxel_size steps between consecutive culled waypoints so that
+        the full straight-line corridor is reserved, not just the direction-change points
+        that A* returns after collinear culling.
+        """
+        points = list(path)
+        if not points:
+            return []
+        claimed = []
+        # Single point
+        if len(points) == 1:
+            claimed.extend(self.mark_neighborhood_occupied(points[0], radius))
+            return claimed
+        for i in range(len(points) - 1):
+            p0, p1 = points[i], points[i + 1]
+            dx = p1.x - p0.x
+            dy = p1.y - p0.y
+            dz = p1.z - p0.z
+            dist = (dx * dx + dy * dy + dz * dz) ** 0.5
+            steps = max(1, int(dist / self.voxel_size) + 1)
+            seen = set()
+            for j in range(steps + 1):
+                t = j / steps
+                p = Vector3(p0.x + t * dx, p0.y + t * dy, p0.z + t * dz)
+                vox = self.world_to_voxel(p)
+                key = (vox.x, vox.y, vox.z)
+                if key not in seen:
+                    seen.add(key)
+                    claimed.extend(self.mark_neighborhood_occupied(p, radius))
+        return claimed
+
     def is_occupied(self, pos: Vector3) -> bool:
         return self.is_voxel_occupied(self.world_to_voxel(pos))
 

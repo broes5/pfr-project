@@ -12,12 +12,12 @@ PLACE_ALT_OFFSET = 0.17  # approach this far above the target brick z before sig
 # Loose waypoint threshold (0.5 m) keeps drones moving without requiring pixel-perfect alignment.
 # Tight arrival threshold (0.2 m) ensures the PICKUP/PLACE signal fires close to the actual brick.
 TASK_ARRIVAL_THRESHOLD = 0.20  # m — 3D distance to task pos before emitting PICKUP/PLACE signal
-WAYPOINT_THRESHOLD     = 0.60  # m — advance to next waypoint when within this distance
+WAYPOINT_THRESHOLD     = 0.40 # m — advance to next waypoint when within this distance
 
 # ── Feature flags ─────────────────────────────────────────────────────────────
 OBSTACLE_AVOIDANCE = False  # distance-sensor-based inter-drone collision avoidance
 
 # ── Starting formation ────────────────────────────────────────────────────────
-DRONE_SPACING = 1.5   # m between drones in the initial line formation
+DRONE_SPACING = 2.5   # m between drones in the initial line formation
 DRONE_START_X = -2.0   # starting X (forward of origin)
 DRONE_START_Z = 0.065 # ground level clearance at spawn

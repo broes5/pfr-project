@@ -19,7 +19,7 @@ from shared.config import (
 
 WORLD_ORIGIN = Vector3(-8.0, -8.0, 0.0)
 WORLD_SIZE   = Vector3(16.0, 16.0, 8.0)
-VOXEL_SIZE   = 0.75
+VOXEL_SIZE   = 0.35
 
 brick_targets = to_world_coords(parse_brick_file(BRICK_FILE))
 configure(len(brick_targets))
@@ -60,17 +60,16 @@ takeoff_sent = False
 def _path_msg(drone_name, start, goal, yaw=None, _collect=None):
     """Compute A* path, mark it occupied, send PATH message. Returns True on success.
 
-    Temporarily frees the start voxel so the shared endpoint of the previous leg
-    (already marked) is a valid start for A*. Restores it on failure so another
-    drone's reservation isn't permanently corrupted.
+    Frees the 3x3x3 neighbourhood of start before pathfinding so A* can expand
+    from the shared endpoint of the previous leg (which was fully claimed).
+    On failure the neighbourhood is restored exactly as it was.
     """
-    start_was_occupied = voxel_world.is_occupied(start)
-    voxel_world.mark_free(start)
+    freed_nbrs = voxel_world.free_neighborhood(start, radius=1)
     path = find_path(voxel_world, start, goal)
     if path and len(path) > 0:
-        voxel_world.mark_path_occupied(path)
+        claimed = voxel_world.mark_path_neighborhood_occupied(path)
         if _collect is not None:
-            _collect.extend(path)
+            _collect.extend(claimed)
         wp_strs = ' '.join(f"{wp.x},{wp.y},{wp.z}" for wp in path)
         yaw_prefix = f"YAW:{yaw:.4f} " if yaw is not None else ""
         emitter.send(f"{drone_name} PATH {yaw_prefix}{wp_strs}".encode('utf-8'))
@@ -78,8 +77,7 @@ def _path_msg(drone_name, start, goal, yaw=None, _collect=None):
         print(f"[CTRL] PATH{yaw_info} ({len(path)} wps) ({start.x:.2f},{start.y:.2f},{start.z:.2f}) → ({goal.x:.2f},{goal.y:.2f},{goal.z:.2f})")
         return True
     else:
-        if start_was_occupied:
-            voxel_world.mark_occupied(start)  # restore another drone's voxel
+        voxel_world.restore_voxels(freed_nbrs)
         print(f"[CTRL] No path ({start.x:.2f},{start.y:.2f},{start.z:.2f}) → ({goal.x:.2f},{goal.y:.2f},{goal.z:.2f}) — blocked")
         return False
 
