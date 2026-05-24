@@ -177,7 +177,7 @@ def assign_brick(drone_name, t=0.0):
     wps = []
     ok = (_path_msg(drone_name, cur,     p1_goal,          _collect=wps) and
           _path_msg(drone_name, p1_goal, p2_goal,          _collect=wps) and
-          _path_msg(drone_name, p2_goal, p3_goal, yaw=0.0,  _collect=wps) and
+          _path_msg(drone_name, p2_goal, p3_goal, yaw=0.0, _collect=wps) and
           _path_msg(drone_name, p3_goal, p4_goal, yaw=0.0, _collect=wps))
 
     if not ok:

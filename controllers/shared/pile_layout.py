@@ -2,12 +2,12 @@ import math
 
 from .vector3 import Vector3
 
-PILE_POSITION       = Vector3(-4.0, 0.0, 0.0)
+PILE_POSITION       = Vector3(-6.0, 0.0, 0.0)
 PILE_COLS           = 5
 PILE_ROWS           = 5
-PILE_SPACING_XY     = 0.6    # must exceed voxel_size (0.5) so each pile pos gets its own voxel
+PILE_SPACING_XY     = 0.75
 PILE_BRICK_HEIGHT   = 0.15
-PICKUP_HOVER_OFFSET_A = 1.0
+PICKUP_HOVER_OFFSET_A = 1.2
 PICKUP_HOVER_OFFSET_B = 0.15
 
 _layer_size = PILE_COLS * PILE_ROWS

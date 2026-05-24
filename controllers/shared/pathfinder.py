@@ -25,6 +25,19 @@ def _h(a: Vector3Int, b: Vector3Int) -> float:
     return math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2 + (a.z - b.z) ** 2)
 
 
+def _cull_collinear(points: list) -> list:
+    if len(points) <= 2:
+        return points
+    result = [points[0]]
+    for i in range(1, len(points) - 1):
+        d1 = points[i] - points[i - 1]
+        d2 = points[i + 1] - points[i]
+        if d1.cross(d2).sqr_magnitude > 1e-10:
+            result.append(points[i])
+    result.append(points[-1])
+    return result
+
+
 def find_path(world: VoxelWorld, start: Vector3, goal: Vector3, goal_tolerance: int = 2):
     """Return a Path of world-space waypoints from start to goal, or None if unreachable.
 
@@ -88,6 +101,11 @@ def find_path(world: VoxelWorld, start: Vector3, goal: Vector3, goal_tolerance: 
                 node = came_from[node]
             path.append(world.voxel_to_world(sv))
             path._points.reverse()
+
+            path._points[0] = start
+            path._points[-1] = goal
+
+            path._points = _cull_collinear(path._points)
             return path
 
         for delta in _NEIGHBOURS:
