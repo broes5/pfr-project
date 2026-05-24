@@ -18,3 +18,6 @@ class Path:
 
     def __repr__(self):
         return f"Path({self._points})"
+
+    def cullAdjacents(self):
+        printf('System Not Implemented Exception')

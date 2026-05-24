@@ -1,6 +1,6 @@
 # ── Fleet ────────────────────────────────────────────────────────────────────
 N_DRONES   = 4            # number of drones to spawn and coordinate
-BRICK_FILE = "../instructions/few.txt"  # target structure definition (242 bricks, 6 layers)
+BRICK_FILE = "../instructions/uni1.txt"  # target structure definition (242 bricks, 6 layers)
 
 # ── Flight altitudes (shared between controller_device and drone) ─────────────
 TASK_ALT         = 3.0   # cruise altitude during transit — high enough to clear the pile and structure

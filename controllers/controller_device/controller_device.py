@@ -10,7 +10,7 @@ from shared.brick_parser import parse_brick_file, to_world_coords
 from shared.pile_layout import (
     configure, pile_pos_for_brick, pile_layer_for_brick,
     pile_layer_size, pile_layer_count_for_layer, pile_layers_for_count,
-    PICKUP_HOVER_OFFSET, PILE_POSITION,
+    PICKUP_HOVER_OFFSET_A, PICKUP_HOVER_OFFSET_B, PILE_POSITION,
 )
 from shared.config import (
     N_DRONES, BRICK_FILE,
@@ -19,7 +19,7 @@ from shared.config import (
 
 WORLD_ORIGIN = Vector3(-8.0, -8.0, 0.0)
 WORLD_SIZE   = Vector3(16.0, 16.0, 8.0)
-VOXEL_SIZE   = 0.5
+VOXEL_SIZE   = 0.75
 
 brick_targets = to_world_coords(parse_brick_file(BRICK_FILE))
 configure(len(brick_targets))
@@ -139,7 +139,7 @@ def assign_brick(drone_name, t=0.0):
             waiting_since[drone_name] = t
             print(f"[CTRL] {drone_name}: waiting for pile layer to complete")
         else:
-            # No bricks remain — route drone to its dedicated rest bay
+            # No bricks remain — pathfind to rest bay, then queue a LAND task
             first = drone_first_positions[drone_name]
             rest = Vector3(first.x, first.y, TASK_ALT)
             p1 = Vector3(cur.x, cur.y, TASK_ALT)
@@ -150,8 +150,8 @@ def assign_brick(drone_name, t=0.0):
             if ok:
                 drone_reserved[drone_name] = wps
                 resting.add(drone_name)
-                print(f"[CTRL] {drone_name}: no bricks left — routing to rest bay "
-                      f"({rest.x:.2f},{rest.y:.2f},{rest.z:.2f})")
+                emitter.send(f"{drone_name} TASK LAND".encode('utf-8'))
+                print(f"[CTRL] {drone_name}: no bricks left — pathing to rest bay, LAND queued")
             else:
                 print(f"[CTRL] {drone_name}: path to rest bay blocked, will retry")
         return
@@ -165,15 +165,20 @@ def assign_brick(drone_name, t=0.0):
     _free_reservation(drone_name, t)
     unplaced.popleft()   # commit — position is deterministic from brick_id
 
-    hover   = Vector3(pile_pos.x, pile_pos.y, pile_pos.z + PICKUP_HOVER_OFFSET)
+    hover = Vector3(pile_pos.x, pile_pos.y, pile_pos.z + PICKUP_HOVER_OFFSET_B)
+
     p1_goal = Vector3(cur.x,    cur.y,    TASK_ALT)
     p2_goal = Vector3(hover.x,  hover.y,  TASK_ALT)
-    p3_goal = hover
+    p3_goal = Vector3(pile_pos.x, pile_pos.y, pile_pos.z + PICKUP_HOVER_OFFSET_A)
+    p4_goal = hover
+
+    hover   = p4_goal
 
     wps = []
     ok = (_path_msg(drone_name, cur,     p1_goal,          _collect=wps) and
           _path_msg(drone_name, p1_goal, p2_goal,          _collect=wps) and
-          _path_msg(drone_name, p2_goal, p3_goal, yaw=0.0, _collect=wps))
+          _path_msg(drone_name, p2_goal, p3_goal, yaw=0.0,  _collect=wps) and
+          _path_msg(drone_name, p3_goal, p4_goal, yaw=0.0, _collect=wps))
 
     if not ok:
         for wp in wps:

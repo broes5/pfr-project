@@ -87,6 +87,9 @@ while robot.step(timestep) != -1:
                     print(f'[TASK] Queued PLACE brick {brick_id} → fly to z={place_fly_z:.2f}m, place at z={tz:.3f}')
                 except (ValueError, IndexError):
                     print(f'[TASK] Malformed TASK PLACE: {packet}')
+            elif len(parts) == 3 and parts[0] == drone_name and parts[1] == 'TASK' and parts[2] == 'LAND':
+                task_queue.append(('LAND',))
+                print(f'[TASK] Queued LAND task')
             receiver.nextPacket()
     # send drone's current status (current and target location) at twice the speed of the print counter
     if emitter and print_counter % 50 == 0:
@@ -204,13 +207,20 @@ while robot.step(timestep) != -1:
                     print(f'[PATH] Next leg: {len(current_path)} waypoints{yaw_info}')
                 elif task_queue and current_task is None:
                     current_task = task_queue.pop(0)
-                    dest = current_task[2]
-                    if current_task[0] == 'PICKUP':
-                        targetYaw = current_task[3]
-                    elif current_task[0] == 'PLACE':
-                        targetYaw = current_task[6]
-                    targetPos = Vector3(dest.x, dest.y, dest.z)
-                    print(f'[TASK] All paths done, activating {current_task[0]} brick {current_task[1]} → ({targetPos.x:.2f},{targetPos.y:.2f},{targetPos.z:.2f})')
+                    if current_task[0] == 'LAND':
+                        state = LAND
+                        land_stage = 0
+                        land_stage_timer = t
+                        current_task = None
+                        print(f'[TASK] LAND activated — beginning staged descent')
+                    else:
+                        dest = current_task[2]
+                        if current_task[0] == 'PICKUP':
+                            targetYaw = current_task[3]
+                        elif current_task[0] == 'PLACE':
+                            targetYaw = current_task[6]
+                        targetPos = Vector3(dest.x, dest.y, dest.z)
+                        print(f'[TASK] All paths done, activating {current_task[0]} brick {current_task[1]} → ({targetPos.x:.2f},{targetPos.y:.2f},{targetPos.z:.2f})')
 
     # Fallback: if idle with no current path, advance the queue
     if state == FLY and current_task is None and current_path is None:
@@ -225,13 +235,20 @@ while robot.step(timestep) != -1:
             print(f'[PATH] Fallback: starting queued path, {len(current_path)} waypoints')
         elif task_queue:
             current_task = task_queue.pop(0)
-            dest = current_task[2]
-            if current_task[0] == 'PICKUP':
-                targetYaw = current_task[3]
-            elif current_task[0] == 'PLACE':
-                targetYaw = current_task[6]
-            targetPos = Vector3(dest.x, dest.y, dest.z)
-            print(f'[TASK] Activating {current_task[0]} brick {current_task[1]} → ({dest.x:.2f},{dest.y:.2f},{dest.z:.2f}) (fallback)')
+            if current_task[0] == 'LAND':
+                state = LAND
+                land_stage = 0
+                land_stage_timer = t
+                current_task = None
+                print(f'[TASK] LAND activated — beginning staged descent')
+            else:
+                dest = current_task[2]
+                if current_task[0] == 'PICKUP':
+                    targetYaw = current_task[3]
+                elif current_task[0] == 'PLACE':
+                    targetYaw = current_task[6]
+                targetPos = Vector3(dest.x, dest.y, dest.z)
+                print(f'[TASK] Activating {current_task[0]} brick {current_task[1]} → ({dest.x:.2f},{dest.y:.2f},{dest.z:.2f}) (fallback)')
 
     # Emit PICKUP / PLACE signal when task descent position is reached
     if state == FLY and current_task is not None:

@@ -121,9 +121,9 @@ K_COMP_AGGRESSION = 0.6
 # ── Horizontal position PID ──────────
 # Low P/I to prevent the drone from chasing its target too aggressively and
 # oscillating over it. D damps GPS-velocity noise.
-K_POS_P = 0.3
+K_POS_P = 0.4
 K_POS_D = 0.8
-K_POS_I = 0.3
+K_POS_I = 0.6
 
 # ── Yaw PID ──────────────────────────
 K_YAW_P = 2.0

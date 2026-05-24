@@ -7,12 +7,12 @@ PILE_COLS           = 5
 PILE_ROWS           = 5
 PILE_SPACING_XY     = 0.6    # must exceed voxel_size (0.5) so each pile pos gets its own voxel
 PILE_BRICK_HEIGHT   = 0.15
-PICKUP_HOVER_OFFSET = 0.15   # m above brick bottom — puts drone right at brick-top level
+PICKUP_HOVER_OFFSET_A = 1.0
+PICKUP_HOVER_OFFSET_B = 0.15
 
 _layer_size = PILE_COLS * PILE_ROWS
 _n_layers   = 1   # overwritten by configure()
 _n_bricks   = 0   # overwritten by configure()
-
 
 def configure(n_bricks):
     """Compute the number of pile layers needed to hold n_bricks. Must be called
